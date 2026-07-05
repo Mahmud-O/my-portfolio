@@ -229,7 +229,7 @@ export default function HeroSection() {
                 Download CV
               </a>
               <a
-                href="https://github.com/Mahmoud-O"
+                href="https://github.com/Mahmud-O"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="btn-secondary text-sm sm:text-base lg:text-lg px-6! sm:px-7! lg:px-8! py-2.5! sm:py-3! lg:py-4!"

@@ -19,7 +19,7 @@ const ContactSidebar = () => {
             link: 'https://www.facebook.com/mahmoud.osama.550367',
         },
         { name: 'WhatsApp account', link: 'https://wa.me/+201016074277' },
-        { name: 'GitHub account', link: 'https://github.com/mahmoud25osama' },
+        { name: 'GitHub account', link: 'https://github.com/Mahmud-O' },
     ]
     const toggleSection = (sectionKey: SectionKey) => {
         setExpandedSections((prev) => ({

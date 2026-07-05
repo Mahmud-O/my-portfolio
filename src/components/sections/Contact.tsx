@@ -102,7 +102,7 @@ export default function ContactSection() {
                             <p className="text-slate-300 text-sm">
                                 I typically reply within
                                 <span className="gradient-text font-semibold">24 hours</span>.
-                                Looking forward to your message! ðŸš€
+                                Looking forward to your message!
                             </p>
                         </div>
                     </div>
@@ -125,9 +125,9 @@ export default function ContactSection() {
                                 </p>
                                 <button
                                     onClick={() => setStatus('idle')}
-                                    className="btn-secondary !py-2.5 !px-6 !text-sm"
+                                    className="btn-secondary py-2.5! px-6! text-sm!"
                                 >
-                                    Send another â†’
+                                    Send another Mail
                                 </button>
                             </div>
                         ) : (
@@ -192,7 +192,7 @@ export default function ContactSection() {
                                     {status === 'loading' ? (
                                         <>
                                             <span className="w-4 h-4 rounded-full border-2 border-white/30 border-t-white animate-spin" />
-                                            Sendingâ€¦
+                                            Sending...
                                         </>
                                     ) : (
                                         <>

@@ -104,7 +104,7 @@ style={{
               href="/Mahmoud_Osama_Full_Stack.pdf"
               target="_blank"
               rel="noopener noreferrer"
-              className="btn-primary !py-2 !px-4 !text-sm"
+              className="btn-primary py-2! px-4!  text-sm!"
             >
               Resume
             </a>
@@ -146,10 +146,10 @@ style={{
               })}
               <div className="pt-2 mt-1 border-t border-white/10 flex gap-3">
                 <a
-                  href="https://github.com/mahmoud25osama"
+                  href="https://github.com/Mahmud-O"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex-1 btn-secondary !py-2.5 !text-sm justify-center"
+                  className="flex-1 btn-secondary py-2.5! text-sm! justify-center"
                 >
                   <FaGithub size={16} />
                   GitHub
@@ -158,7 +158,7 @@ style={{
                   href="/Mahmoud_Osama_Full_Stack.pdf"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex-1 btn-primary !py-2.5 !text-sm justify-center"
+                  className="flex-1 btn-primary py-2.5! text-sm! justify-center"
                 >
                   Resume
                 </a>

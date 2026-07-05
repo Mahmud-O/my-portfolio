@@ -201,8 +201,8 @@ export const contactLinks: ContactLink[] = [
     {
         icon: FaGithub,
         label: 'GitHub',
-        value: 'github.com/Mahmoud-O',
-        href: 'https://github.com/Mahmoud-O',
+        value: 'github.com/Mahmud-O',
+        href: 'https://github.com/Mahmud-O',
         accent: '#e2e8f0',
         bg: 'rgba(255,255,255,0.06)',
     },
@@ -403,6 +403,6 @@ export const NAV_LINKS = [
 ]
 
 export const SOCIAL_LINKS = [
-  { name: 'GitHub', href: 'https://github.com/mahmoud25osama', icon: FaGithub },
+  { name: 'GitHub', href: 'https://github.com/Mahmud-O', icon: FaGithub },
   { name: 'LinkedIn', href: 'https://linkedin.com/in/mahmoud25osama', icon: FaLinkedin },
 ]
