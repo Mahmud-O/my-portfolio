@@ -4,8 +4,6 @@ import { techStack, HERO_PHRASES } from '@/lib/heroData'
 
 const PROFILE_IMAGE_SRC = '/img/personal-portrait-768.jpg'
 const PROFILE_IMAGE_SRC_SET = [
-  '/img/personal-portrait-384.jpg 384w',
-  '/img/personal-portrait-512.jpg 512w',
   '/img/personal-portrait-768.jpg 768w',
   '/img/personal-portrait-1024.jpg 1024w',
 ].join(', ')
