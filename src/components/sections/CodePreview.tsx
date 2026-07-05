@@ -1,7 +1,28 @@
-'use client'
-
-import { customTheme } from '@/lib/constants'
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
+import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism'
+
+const customTheme = {
+    ...vscDarkPlus,
+    'code[class*="language-"]': {
+        ...vscDarkPlus['code[class*="language-"]'],
+        color: '#607B96',
+        fontFamily: 'monospace',
+    },
+    'pre[class*="language-"]': {
+        ...vscDarkPlus['pre[class*="language-"]'],
+        backgroundColor: 'transparent',
+        padding: '0',
+        margin: '0',
+    },
+    keyword: { color: '#C792EA' },
+    function: { color: '#E06C75' },
+    string: { color: '#43D9AD' },
+    comment: { color: '#90A1B9' },
+    operator: { color: '#607B96' },
+    punctuation: { color: '#607B96' },
+    constant: { color: '#E06C75' },
+    'class-name': { color: '#E06C75' },
+}
 
 const CodePreview: React.FC = () => {
     const codeContent = `class Developer {

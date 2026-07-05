@@ -1,4 +1,3 @@
-'use client'
 import { useEffect, useRef, useState } from 'react'
 import { motion, useMotionValue, useTransform } from 'framer-motion'
 import gsap from 'gsap'
@@ -201,3 +200,4 @@ function ExperienceCard({ item, index }: { item: TimelineItem; index: number }) 
     </motion.div>
   )
 }
+

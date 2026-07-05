@@ -1,5 +1,3 @@
-'use client'
-
 interface LogoProps {
   size?: number
   className?: string
@@ -68,3 +66,4 @@ export function LogoIcon({ size = 32, className = '' }: { size?: number; classNa
     />
   )
 }
+

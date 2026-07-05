@@ -1,4 +1,3 @@
-'use client'
 import { FaReact } from 'react-icons/fa'
 import { RiNextjsFill } from 'react-icons/ri'
 
@@ -61,3 +60,4 @@ export default function ProjectsFilter({
         </div>
     )
 }
+

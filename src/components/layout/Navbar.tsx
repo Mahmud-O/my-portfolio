@@ -101,7 +101,7 @@ style={{
               <FaGithub size={18} />
             </a>
             <a
-              href="/Mahmoud_Osama_MERN_Stack.pdf"
+              href="/Mahmoud_Osama_Full_Stack.pdf"
               target="_blank"
               rel="noopener noreferrer"
               className="btn-primary !py-2 !px-4 !text-sm"
@@ -155,7 +155,7 @@ style={{
                   GitHub
                 </a>
                 <a
-                  href="/Mahmoud_Osama_MERN_Stack.pdf"
+                  href="/Mahmoud_Osama_Full_Stack.pdf"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex-1 btn-primary !py-2.5 !text-sm justify-center"
@@ -172,3 +172,4 @@ style={{
 }
 
 export default Navbar
+

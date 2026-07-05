@@ -1,5 +1,3 @@
-'use client'
-
 import { motion } from 'framer-motion'
 import { LogoIcon } from './Logo'
 import Logo from './Logo'
@@ -19,7 +17,7 @@ const Footer = () => {
       {/* Floating Back-to-Top Button */}
       {/* top glow line */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 max-w-3xl h-px
-                      bg-gradient-to-r from-transparent via-red-500/50 to-transparent shadow-[0_0_20px_rgba(239,68,68,0.5)]" />
+                      bg-linear-to-r from-transparent via-red-500/50 to-transparent shadow-[0_0_20px_rgba(239,68,68,0.5)]" />
 
       {/* bg grid */}
       <div className="absolute inset-0 bg-grid opacity-30 pointer-events-none" />

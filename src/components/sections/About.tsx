@@ -1,4 +1,3 @@
-'use client'
 import { useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
 import SkillCard from '@/components/ui/SkillCard'
@@ -10,7 +9,7 @@ import { createCardVariants, iconBoxVariants } from '@/lib/animations'
 gsap.registerPlugin(ScrollTrigger)
 
 const cardVariants = createCardVariants(-6, 1, '0 20px 60px rgba(200,53,58,0.18), 0 4px 24px rgba(0,0,0,0.5)');
-/* ── Main Component ──────────────────────────────── */
+/* â”€â”€ Main Component â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 export default function AboutSection() {
   const sectionRef  = useRef<HTMLElement>(null)
   const headerRef   = useRef<HTMLDivElement>(null)
@@ -65,7 +64,7 @@ export default function AboutSection() {
 
       <div className="relative z-10 max-w-6xl xl:max-w-7xl 3xl:max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-12">
 
-        {/* ── Section Header ─────────────────── */}
+        {/* â”€â”€ Section Header â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
         <div ref={headerRef} className="text-center mb-12 sm:mb-16" style={{ opacity: 0 }}>
           <div className="inline-flex items-center gap-2 px-3 sm:px-4 py-2 rounded-full glass mb-4 sm:mb-6">
             <span className="w-2 h-2 rounded-full bg-crimson-500 animate-pulse" />
@@ -79,7 +78,7 @@ export default function AboutSection() {
           </p>
         </div>
 
-        {/* ── Bio + Stats ─────────────────────── */}
+        {/* â”€â”€ Bio + Stats â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
         <div ref={contentRef} className="max-w-6xl mx-auto mb-20" style={{ opacity: 0 }}>
           <motion.div className="glass rounded-2xl p-8 mb-6 border border-white/[0.08] cursor-default"
             initial="rest" whileHover="hover" variants={cardVariants}>
@@ -122,7 +121,7 @@ export default function AboutSection() {
           </div>
         </div>
 
-        {/* ── Skills Section ─────────────────── */}
+        {/* â”€â”€ Skills Section â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
         <div ref={skillsRef} className="mb-20">
           {/* Sub-header */}
           <div className="text-center mb-8">
@@ -177,3 +176,4 @@ export default function AboutSection() {
     </section>
   )
 }
+

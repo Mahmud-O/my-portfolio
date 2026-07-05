@@ -1,4 +1,3 @@
-'use client'
 import { useEffect, useRef, useState } from 'react'
 import { motion, useMotionValue, useTransform } from 'framer-motion'
 import gsap from 'gsap'
@@ -195,3 +194,4 @@ function ServiceCard({ service }: { service: ServiceItem }) {
     </motion.div>
   )
 }
+

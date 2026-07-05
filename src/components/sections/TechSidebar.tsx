@@ -1,4 +1,3 @@
-'use client'
 import { technologies } from '@/lib/constants'
 import { FaChevronDown, FaCheck, FaFilter } from 'react-icons/fa6'
 
@@ -164,3 +163,4 @@ export default function TechSidebar({
         </>
     )
 }
+

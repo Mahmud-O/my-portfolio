@@ -1,4 +1,3 @@
-'use client'
 import { useEffect, useRef } from 'react'
 import gsap from 'gsap'
 
@@ -63,3 +62,4 @@ const CustomCursor = () => {
 }
 
 export default CustomCursor
+

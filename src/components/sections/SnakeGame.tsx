@@ -1,8 +1,6 @@
-'use client'
 import { CELL_SIZE, INITIAL_SNAKE } from '@/lib/constants'
 import { DirectionType, GameState, SnakePosition } from '@/lib/types'
 import { checkCollision, generateFood } from '@/lib/utils'
-import { useRouter } from 'next/navigation'
 import { useCallback, useEffect, useState } from 'react'
 import {
     FaChevronDown,
@@ -21,16 +19,15 @@ const SnakeGame = () => {
         isPlaying: false,
     })
     const [gameCompleted, setGameCompleted] = useState(false)
-    const nav = useRouter()
     const handleGameComplete = useCallback(() => {
         if (!gameCompleted) {
             setGameCompleted(true)
 
             setTimeout(() => {
-                nav.push('/about')
+                document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' })
             }, 3000)
         }
-    }, [gameCompleted, nav])
+    }, [gameCompleted])
 
     const [nextDirection, setNextDirection] = useState<DirectionType>('UP')
     // Handle direction change
@@ -392,3 +389,4 @@ const SnakeGame = () => {
     )
 }
 export default SnakeGame
+

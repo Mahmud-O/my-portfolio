@@ -1,4 +1,3 @@
-'use client'
 import { useRef } from 'react'
 import { motion, useMotionValue, useSpring } from 'framer-motion'
 import { Project } from '@/lib/types'
@@ -7,7 +6,7 @@ import { FaArrowUpRightFromSquare, FaGithub } from 'react-icons/fa6'
 export default function ProjectCard({ project }: { project: Project }) {
   const Icon = project?.techIcon?.icon
 
-  /* ── subtle magnetic tilt on hover ── */
+  /* â”€â”€ subtle magnetic tilt on hover â”€â”€ */
   const cardRef = useRef<HTMLDivElement>(null)
   const rotX = useMotionValue(0)
   const rotY = useMotionValue(0)
@@ -40,11 +39,13 @@ export default function ProjectCard({ project }: { project: Project }) {
       className="project-card group relative flex flex-col rounded-2xl overflow-hidden
                  gradient-border bg-[rgba(255,255,255,0.03)] h-full"
     >
-      {/* ── Image ───────────────────────────────── */}
+      {/* â”€â”€ Image â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
       <div className="relative h-44 sm:h-48 overflow-hidden bg-slate-900/50 shrink-0">
         <img
           src={project.image}
           alt={project.title}
+          loading="lazy"
+          decoding="async"
           className="absolute inset-0 w-full h-full object-cover
                      group-hover:scale-108 transition-transform duration-700 ease-out"
         />
@@ -99,7 +100,7 @@ export default function ProjectCard({ project }: { project: Project }) {
                         bg-gradient-to-t from-[#0d0d0d] to-transparent" />
       </div>
 
-      {/* ── Content ─────────────────────────────── */}
+      {/* â”€â”€ Content â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
       <div className="flex flex-col flex-1 p-5 gap-3">
         <h3 className="text-sm sm:text-base font-semibold text-slate-100
                        font-mono leading-snug line-clamp-2 group-hover:text-white
@@ -154,3 +155,4 @@ export default function ProjectCard({ project }: { project: Project }) {
     </motion.div>
   )
 }
+

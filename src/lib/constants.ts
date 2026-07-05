@@ -7,7 +7,6 @@ import {
   FaLinkedin
 } from 'react-icons/fa6'
 import { IoMdMail } from 'react-icons/io'
-import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism'
 import { RiNextjsFill, RiTailwindCssFill } from 'react-icons/ri'
 import {
   SiTypescript, SiTailwindcss, SiFirebase, SiSupabase, SiMongodb, SiExpress,
@@ -256,30 +255,6 @@ export const technologies = [
     { id: 'react', name: 'React', icon: FaReact, color: 'text-red-400' },
     { id: 'nextjs', name: 'Next.js', icon: RiNextjsFill, color: 'text-white' },
 ]
-// Syntax Highlighter Theme
-export const customTheme = {
-    ...vscDarkPlus,
-    'code[class*="language-"]': {
-        ...vscDarkPlus['code[class*="language-"]'],
-        color: '#607B96',
-        fontFamily: 'monospace',
-    },
-    'pre[class*="language-"]': {
-        ...vscDarkPlus['pre[class*="language-"]'],
-        backgroundColor: 'transparent',
-        padding: '0',
-        margin: '0',
-    },
-    keyword: { color: '#C792EA' },
-    function: { color: '#E06C75' },
-    string: { color: '#43D9AD' },
-    comment: { color: '#90A1B9' },
-    operator: { color: '#607B96' },
-    punctuation: { color: '#607B96' },
-    constant: { color: '#E06C75' },
-    'class-name': { color: '#E06C75' },
-}
-
 // Hero Constants
 export const techStack = [
   { icon: FaReact, label: 'React', color: '#dc2626' },

@@ -1,4 +1,3 @@
-'use client'
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { HiArrowUp } from 'react-icons/hi2'
@@ -35,3 +34,4 @@ export default function BackToTop() {
     </AnimatePresence>
   )
 }
+
