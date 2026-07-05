@@ -19,7 +19,7 @@ type DeferredSectionProps = {
 function DeferredSection({
   id,
   component: Component,
-  rootMargin = '700px 0px',
+  rootMargin = '0px',
 }: DeferredSectionProps) {
   const ref = useRef<HTMLElement>(null)
   const [shouldLoad, setShouldLoad] = useState(false)

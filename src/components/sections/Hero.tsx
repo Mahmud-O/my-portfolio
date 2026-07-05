@@ -112,10 +112,21 @@ export default function HeroSection() {
       cleanup = () => ctx.revert()
     }
 
-    runAnimation()
+    const startAnimation = () => {
+      void runAnimation()
+    }
+
+    const idleId = window.requestIdleCallback
+      ? window.requestIdleCallback(startAnimation, { timeout: 1500 })
+      : window.setTimeout(startAnimation, 250)
 
     return () => {
       mounted = false
+      if (window.cancelIdleCallback) {
+        window.cancelIdleCallback(idleId)
+      } else {
+        window.clearTimeout(idleId)
+      }
       cleanup?.()
     }
   }, [])

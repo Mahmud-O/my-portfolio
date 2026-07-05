@@ -38,37 +38,39 @@ export default function ProjectsSection() {
         </div>
 
         <div className="flex justify-center mb-12">
-          <div className="inline-flex flex-wrap justify-center items-center gap-1 p-1.5 rounded-2xl glass max-w-[90vw]">
-            {filters.map((f) => (
-              <button
-                key={f.id}
-                onClick={() => setActiveFilter(f.id)}
-                className={`relative px-4 sm:px-5 py-2 rounded-xl text-xs sm:text-sm font-medium transition-all duration-300 ${
-                  activeFilter === f.id
-                    ? 'text-white'
-                    : 'text-slate-400 hover:text-slate-200'
-                }`}
-              >
-                {activeFilter === f.id && (
-                  <span
-                    className="absolute inset-0 rounded-xl"
-style={{
-            background: 'linear-gradient(135deg, rgba(20,184,166,0.3),rgba(6,182,212,0.15))',
-            border: '1px solid rgba(20,184,166,0.4)',
-          }}
-                  />
-                )}
-                <span className="relative z-10">{f.label}</span>
-              </button>
-            ))}
+          <div className="inline-flex flex-wrap justify-center items-center gap-1 rounded-lg border border-white/[0.08] bg-white/[0.04] p-1.5 backdrop-blur-2xl max-w-[90vw]">
+            {filters.map((f) => {
+              const active = activeFilter === f.id
+
+              return (
+                <button
+                  key={f.id}
+                  onClick={() => setActiveFilter(f.id)}
+                  className={`relative px-4 sm:px-5 py-2 rounded-md text-xs sm:text-sm font-medium transition-all duration-300 ${
+                    active ? 'text-white' : 'text-slate-400 hover:text-slate-200'
+                  }`}
+                >
+                  {active && (
+                    <span
+                      className="absolute inset-0 rounded-md"
+                      style={{
+                        background: 'linear-gradient(135deg, rgba(220,38,38,0.24), rgba(127,29,29,0.18))',
+                        border: '1px solid rgba(220,38,38,0.34)',
+                      }}
+                    />
+                  )}
+                  <span className="relative z-10">{f.label}</span>
+                </button>
+              )
+            })}
           </div>
         </div>
 
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-4 3xl:grid-cols-5 gap-4 sm:gap-5">
-      {filtered.map((project) => (
-        <ProjectCard key={project.id} project={project} />
-      ))}
-    </div>
+        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 3xl:grid-cols-4">
+          {filtered.map((project) => (
+            <ProjectCard key={project.id} project={project} />
+          ))}
+        </div>
 
         {filtered.length === 0 && (
           <div className="text-center py-24 text-slate-600 flex flex-col items-center">

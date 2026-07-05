@@ -1,0 +1,10 @@
+# Original source media kept locally, but not needed by the deployed app.
+public/img/*.png
+public/img/*.jpg
+public/img/*.svg
+
+# Runtime assets used by the site.
+!public/img/Mahmoud Osama Logo.svg
+!public/img/logo-*.png
+!public/img/personal-portrait-*.jpg
+!public/img/projects/*.jpg

@@ -1,158 +1,105 @@
-import { useRef } from 'react'
-import { motion, useMotionValue, useSpring } from 'framer-motion'
-import { Project } from '@/lib/types'
+import type { Project } from '@/lib/types'
 import { FaArrowUpRightFromSquare, FaGithub } from 'react-icons/fa6'
 
-export default function ProjectCard({ project }: { project: Project }) {
-  const Icon = project?.techIcon?.icon
+function getTechLabel(tech: Project['tech']) {
+  const value = Array.isArray(tech) ? tech[0] : tech
 
-  /* â”€â”€ subtle magnetic tilt on hover â”€â”€ */
-  const cardRef = useRef<HTMLDivElement>(null)
-  const rotX = useMotionValue(0)
-  const rotY = useMotionValue(0)
-  const springRotX = useSpring(rotX, { stiffness: 200, damping: 20 })
-  const springRotY = useSpring(rotY, { stiffness: 200, damping: 20 })
-
-  const handleMouseMove = (e: React.MouseEvent) => {
-    const el = cardRef.current
-    if (!el) return
-    const { left, top, width, height } = el.getBoundingClientRect()
-    const cx = left + width  / 2
-    const cy = top  + height / 2
-    rotX.set(((e.clientY - cy) / height) * -10)
-    rotY.set(((e.clientX - cx) / width )  *  10)
+  switch (value) {
+    case 'html,css':
+      return 'HTML/CSS'
+    case 'js':
+      return 'JavaScript'
+    case 'nextjs':
+      return 'Next.js'
+    case 'react':
+      return 'React'
+    default:
+      return value
   }
-  const handleMouseLeave = () => { rotX.set(0); rotY.set(0) }
+}
+
+export default function ProjectCard({ project }: { project: Project }) {
+  const Icon = project.techIcon?.icon
+  const techLabel = getTechLabel(project.tech)
 
   return (
-    <motion.div
-      ref={cardRef}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
-      style={{
-        rotateX: springRotX,
-        rotateY: springRotY,
-        transformPerspective: 800,
-      }}
-      whileHover={{ y: -4 }}
-      transition={{ type: 'spring', stiffness: 260, damping: 20 }}
-      className="project-card group relative flex flex-col rounded-2xl overflow-hidden
-                 gradient-border bg-[rgba(255,255,255,0.03)] h-full"
-    >
-      {/* â”€â”€ Image â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
-      <div className="relative h-44 sm:h-48 overflow-hidden bg-slate-900/50 shrink-0">
+    <article className="project-card group relative flex h-full flex-col overflow-hidden rounded-lg border border-white/[0.08] bg-[#101010]/85 shadow-[0_18px_70px_rgba(0,0,0,0.28)] transition-[border-color,background,box-shadow,transform] duration-300 hover:-translate-y-1 hover:border-red-400/30 hover:bg-[#121212] hover:shadow-[0_24px_90px_rgba(0,0,0,0.42)]">
+      <a
+        href={project.liveUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="relative block aspect-[16/10] overflow-hidden bg-slate-950"
+        aria-label={`Open ${project.title}`}
+      >
         <img
           src={project.image}
           alt={project.title}
           loading="lazy"
           decoding="async"
-          className="absolute inset-0 w-full h-full object-cover
-                     group-hover:scale-108 transition-transform duration-700 ease-out"
+          className="absolute inset-0 h-full w-full object-cover transition duration-500 group-hover:scale-105 group-hover:opacity-95"
         />
+        <div className="absolute inset-0 bg-linear-to-t from-[#0a0a0a]/70 via-transparent to-[#0a0a0a]/20 opacity-90" />
 
-        {/* Hover overlay with action buttons */}
-        <div className="absolute inset-0 bg-[#0a0a0a]/85 backdrop-blur-sm
-                        opacity-0 group-hover:opacity-100 transition-all duration-300
-                        flex items-center justify-center gap-3">
-          <a
-            href={project.liveUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-2 px-4 py-2 rounded-xl glass-strong
-                       text-white text-xs font-mono hover:scale-105 transition-transform"
-            aria-label="Live demo"
-          >
-            <FaArrowUpRightFromSquare size={12} />
-            Live Demo
-          </a>
+        <div className="absolute left-3 top-3 flex items-center gap-2">
+          {project.featured && (
+            <span className="rounded-md border border-red-400/25 bg-red-500/15 px-2 py-1 text-[10px] font-semibold uppercase tracking-wide text-red-200 backdrop-blur-md">
+              Featured
+            </span>
+          )}
+          {project.year && (
+            <span className="rounded-md border border-white/10 bg-black/45 px-2 py-1 text-[10px] font-mono text-slate-300 backdrop-blur-md">
+              {project.year}
+            </span>
+          )}
+        </div>
+
+        <span className="absolute bottom-3 right-3 inline-flex h-9 w-9 items-center justify-center rounded-md border border-white/10 bg-black/50 text-white opacity-0 backdrop-blur-md transition duration-300 group-hover:opacity-100">
+          <FaArrowUpRightFromSquare size={13} />
+        </span>
+      </a>
+
+      <div className="flex flex-1 flex-col p-4 sm:p-5">
+        <div className="mb-3 flex items-center justify-between gap-3">
+          <div className="inline-flex min-w-0 items-center gap-2 rounded-md border border-white/[0.07] bg-white/[0.035] px-2.5 py-1.5">
+            {Icon && <Icon size={14} className={project.techIcon?.color} />}
+            <span className="truncate text-[11px] font-mono text-slate-400">{techLabel}</span>
+          </div>
+
           {project.githubUrl && (
             <a
               href={project.githubUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-2 px-4 py-2 rounded-xl glass-strong
-                         text-white text-xs font-mono hover:scale-105 transition-transform"
-              aria-label="GitHub"
+              className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-white/[0.07] bg-white/[0.035] text-slate-400 transition hover:border-white/15 hover:text-white"
+              aria-label={`${project.title} source code`}
             >
-              <FaGithub size={12} />
-              Source
+              <FaGithub size={14} />
             </a>
           )}
         </div>
 
-        {/* Year badge */}
-        <div className="absolute top-3 left-3 px-2.5 py-1 rounded-full
-                        text-xs font-mono bg-[#0a0a0a]/75 text-slate-400
-                        backdrop-blur-sm border border-white/5">
-          {project.year}
-        </div>
-
-        {/* Tech icon badge (top-right) */}
-        {Icon && (
-          <div className={`absolute top-3 right-3 p-2 rounded-xl
-                           backdrop-blur-sm border border-white/5 ${project?.techIcon?.bg}`}>
-            <Icon size={14} className={project?.techIcon?.color} />
-          </div>
-        )}
-
-        {/* Bottom gradient fade */}
-        <div className="absolute bottom-0 inset-x-0 h-8
-                        bg-gradient-to-t from-[#0d0d0d] to-transparent" />
-      </div>
-
-      {/* â”€â”€ Content â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
-      <div className="flex flex-col flex-1 p-5 gap-3">
-        <h3 className="text-sm sm:text-base font-semibold text-slate-100
-                       font-mono leading-snug line-clamp-2 group-hover:text-white
-                       transition-colors">
+        <h3 className="mb-2 text-base font-semibold leading-snug text-slate-100 transition group-hover:text-white">
           {project.title}
         </h3>
 
-        <p className="text-xs sm:text-sm text-slate-500 leading-relaxed
-                      line-clamp-3 flex-1">
+        <p className="line-clamp-3 flex-1 text-sm leading-relaxed text-slate-500">
           {project.description}
         </p>
 
-        {/* Footer links */}
-        <div className="flex items-center justify-between pt-3
-                        border-t border-white/5 mt-auto gap-2">
+        <div className="mt-5 flex items-center justify-between border-t border-white/[0.06] pt-4">
           <a
             href={project.liveUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-1.5 text-xs gradient-text
-                       hover:opacity-80 transition-opacity font-mono group/link"
+            className="inline-flex items-center gap-2 rounded-md bg-red-500 px-3 py-2 text-xs font-semibold text-white shadow-[0_8px_28px_rgba(220,38,38,0.22)] transition hover:bg-red-400"
           >
-            <FaArrowUpRightFromSquare
-              size={10}
-              className="group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5 transition-transform"
-            />
-            Live Demo
+            Open
+            <FaArrowUpRightFromSquare size={11} />
           </a>
 
-          {project.githubUrl && (
-            <a
-              href={project.githubUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-1.5 text-xs text-slate-600
-                         hover:text-slate-400 transition-colors font-mono group/gh"
-            >
-              <FaGithub
-                size={12}
-                className="group-hover/gh:scale-110 transition-transform"
-              />
-              GitHub
-            </a>
-          )}
+          <span className="text-[11px] font-mono text-slate-600">#{project.id.padStart(2, '0')}</span>
         </div>
       </div>
-
-      {/* Subtle inner glow on hover */}
-      <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100
-                      transition-opacity duration-500 pointer-events-none"
-           style={{ boxShadow: 'inset 0 0 40px rgba(185,28,28,0.06)' }} />
-    </motion.div>
+    </article>
   )
 }
-
