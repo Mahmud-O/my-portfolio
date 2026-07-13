@@ -1,34 +1,75 @@
+import { useState, useRef } from 'react'
+import { motion, useMotionValue, useTransform } from 'framer-motion'
 import type { Project } from '@/lib/types'
 import { FaArrowUpRightFromSquare, FaGithub } from 'react-icons/fa6'
 
-function getTechLabel(tech: Project['tech']) {
-  const value = Array.isArray(tech) ? tech[0] : tech
-
-  switch (value) {
-    case 'html,css':
-      return 'HTML/CSS'
-    case 'js':
-      return 'JavaScript'
-    case 'nextjs':
-      return 'Next.js'
-    case 'react':
-      return 'React'
-    default:
-      return value
-  }
-}
-
 export default function ProjectCard({ project }: { project: Project }) {
-  const Icon = project.techIcon?.icon
-  const techLabel = getTechLabel(project.tech)
+  const [hovered, setHovered] = useState(false)
+  const rectRef = useRef<HTMLDivElement>(null)
+
+  const mouseX = useMotionValue(0)
+  const mouseY = useMotionValue(0)
+
+  // 3D Tilt calculations
+  const rotateX = useTransform(mouseY, [0, 300], [4, -4])
+  const rotateY = useTransform(mouseX, [0, 400], [-4, 4])
+
+  function handleMouseMove(e: React.MouseEvent<HTMLDivElement>) {
+    if (!rectRef.current) return
+    const rect = rectRef.current.getBoundingClientRect()
+    mouseX.set(e.clientX - rect.left)
+    mouseY.set(e.clientY - rect.top)
+  }
+
+  function handleMouseLeave() {
+    setHovered(false)
+    mouseX.set(200)
+    mouseY.set(150)
+  }
 
   return (
-    <article className="project-card group relative flex h-full flex-col overflow-hidden rounded-lg border border-white/[0.08] bg-[#101010]/85 shadow-[0_18px_70px_rgba(0,0,0,0.28)] transition-[border-color,background,box-shadow,transform] duration-300 hover:-translate-y-1 hover:border-red-400/30 hover:bg-[#121212] hover:shadow-[0_24px_90px_rgba(0,0,0,0.42)]">
+    <motion.div
+      ref={rectRef}
+      onMouseMove={handleMouseMove}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={handleMouseLeave}
+      className="project-card group relative flex h-full flex-col overflow-hidden rounded-lg border border-white/[0.08] bg-[#101010]/85 shadow-[0_18px_70px_rgba(0,0,0,0.28)] transition-[border-color,background,box-shadow] duration-300 hover:border-red-400/30 hover:bg-[#121212] hover:shadow-[0_24px_90px_rgba(0,0,0,0.42)]"
+      style={{
+        rotateX: hovered ? rotateX : 0,
+        rotateY: hovered ? rotateY : 0,
+        transformPerspective: 1000,
+      }}
+      transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+    >
+      {/* Interactive glowing border mask */}
+      <motion.div
+        className="absolute inset-0 rounded-lg pointer-events-none z-30"
+        style={{
+          background: useTransform(
+            [mouseX, mouseY],
+            ([x, y]) => `radial-gradient(140px circle at ${x}px ${y}px, rgba(239, 68, 68, 0.45), transparent 100%)`
+          ),
+          padding: '1.5px',
+          mask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
+          maskComposite: 'exclude',
+          WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
+          WebkitMaskComposite: 'xor',
+        }}
+      />
+
+      {/* Cybernetic geometric corners */}
+      <div className="absolute inset-0 pointer-events-none z-20">
+        <div className="absolute top-0 left-0 w-3.5 h-3.5 border-t border-l border-white/20 transition-all duration-300 group-hover:w-4.5 group-hover:h-4.5 group-hover:border-red-500" />
+        <div className="absolute top-0 right-0 w-3.5 h-3.5 border-t border-r border-white/20 transition-all duration-300 group-hover:w-4.5 group-hover:h-4.5 group-hover:border-red-500" />
+        <div className="absolute bottom-0 left-0 w-3.5 h-3.5 border-b border-l border-white/20 transition-all duration-300 group-hover:w-4.5 group-hover:h-4.5 group-hover:border-red-500" />
+        <div className="absolute bottom-0 right-0 w-3.5 h-3.5 border-b border-r border-white/20 transition-all duration-300 group-hover:w-4.5 group-hover:h-4.5 group-hover:border-red-500" />
+      </div>
+
       <a
         href={project.liveUrl}
         target="_blank"
         rel="noopener noreferrer"
-        className="relative block aspect-[16/10] overflow-hidden bg-slate-950"
+        className="relative block aspect-[16/10] overflow-hidden bg-slate-955"
         aria-label={`Open ${project.title}`}
       >
         <img
@@ -38,7 +79,7 @@ export default function ProjectCard({ project }: { project: Project }) {
           decoding="async"
           className="absolute inset-0 h-full w-full object-cover transition duration-500 group-hover:scale-105 group-hover:opacity-95"
         />
-        <div className="absolute inset-0 bg-linear-to-t from-[#0a0a0a]/70 via-transparent to-[#0a0a0a]/20 opacity-90" />
+        <div className="absolute inset-0 bg-linear-to-t from-black/70 via-transparent to-black/20 opacity-90" />
 
         <div className="absolute left-3 top-3 flex items-center gap-2">
           {project.featured && (
@@ -60,10 +101,9 @@ export default function ProjectCard({ project }: { project: Project }) {
 
       <div className="flex flex-1 flex-col p-4 sm:p-5">
         <div className="mb-3 flex items-center justify-between gap-3">
-          <div className="inline-flex min-w-0 items-center gap-2 rounded-md border border-white/[0.07] bg-white/[0.035] px-2.5 py-1.5">
-            {Icon && <Icon size={14} className={project.techIcon?.color} />}
-            <span className="truncate text-[11px] font-mono text-slate-400">{techLabel}</span>
-          </div>
+          <h3 className="text-base font-semibold leading-snug text-slate-100 transition group-hover:text-white">
+            {project.title}
+          </h3>
 
           {project.githubUrl && (
             <a
@@ -78,13 +118,20 @@ export default function ProjectCard({ project }: { project: Project }) {
           )}
         </div>
 
-        <h3 className="mb-2 text-base font-semibold leading-snug text-slate-100 transition group-hover:text-white">
-          {project.title}
-        </h3>
-
         <p className="line-clamp-3 flex-1 text-sm leading-relaxed text-slate-500">
           {project.description}
         </p>
+
+        <div className="mt-3 flex flex-wrap gap-1.5">
+          {project.tags.map((tag) => (
+            <span
+              key={tag}
+              className="rounded-full border border-white/[0.06] bg-white/[0.03] px-2.5 py-0.5 text-[10px] font-medium text-slate-400"
+            >
+              {tag}
+            </span>
+          ))}
+        </div>
 
         <div className="mt-5 flex items-center justify-between border-t border-white/[0.06] pt-4">
           <a
@@ -100,6 +147,6 @@ export default function ProjectCard({ project }: { project: Project }) {
           <span className="text-[11px] font-mono text-slate-600">#{project.id.padStart(2, '0')}</span>
         </div>
       </div>
-    </article>
+    </motion.div>
   )
 }

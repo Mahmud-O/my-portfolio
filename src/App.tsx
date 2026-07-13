@@ -1,6 +1,10 @@
 import { lazy, Suspense, useEffect, useRef, useState, type ComponentType } from 'react'
 import Navbar from './components/layout/Navbar'
 import HeroSection from './components/sections/Hero'
+import TechStackSection from './components/sections/TechStack'
+import { ScrollHUDTracker } from './components/ui/ScrollHUDTracker'
+import Preloader from './components/ui/Preloader'
+import { AnimatePresence } from 'framer-motion'
 
 const AboutSection = lazy(() => import('./components/sections/About'))
 const ExperienceSection = lazy(() => import('./components/sections/Experience'))
@@ -44,12 +48,23 @@ function DeferredSection({
     return () => observer.disconnect()
   }, [rootMargin, shouldLoad])
 
+  useEffect(() => {
+    if (shouldLoad) {
+      const timer = setTimeout(() => {
+        import('gsap/ScrollTrigger').then(({ ScrollTrigger }) => {
+          ScrollTrigger.refresh()
+        })
+      }, 250)
+      return () => clearTimeout(timer)
+    }
+  }, [shouldLoad])
+
   if (!shouldLoad) {
-    return <section id={id} ref={ref} className="min-h-screen bg-[#0a0a0a]" />
+    return <section id={id} ref={ref} className="min-h-screen bg-black" />
   }
 
   return (
-    <Suspense fallback={<section id={id} className="min-h-screen bg-[#0a0a0a]" />}>
+    <Suspense fallback={<section id={id} className="min-h-screen bg-black" />}>
       <Component />
     </Suspense>
   )
@@ -79,10 +94,10 @@ function DeferredFooter() {
     return () => observer.disconnect()
   }, [shouldLoad])
 
-  if (!shouldLoad) return <div ref={ref} className="min-h-32 bg-[#0a0a0a]" />
+  if (!shouldLoad) return <div ref={ref} className="min-h-32 bg-black" />
 
   return (
-    <Suspense fallback={<div className="min-h-32 bg-[#0a0a0a]" />}>
+    <Suspense fallback={<div className="min-h-32 bg-black" />}>
       <Footer />
     </Suspense>
   )
@@ -113,20 +128,37 @@ function DeferredBackToTop() {
 }
 
 function App() {
+  const [isSiteLoaded, setIsSiteLoaded] = useState(false)
+
+  const handlePreloaderComplete = () => {
+    setIsSiteLoaded(true)
+    window.__portfolioLoaded = true
+    window.dispatchEvent(new Event('portfolio-loaded'))
+  }
+
   return (
-    <div className="min-h-screen flex flex-col font-inter antialiased bg-[#0a0a0a]">
-      <Navbar />
-      <main className="flex-1 flex flex-col">
-        <HeroSection />
-        <DeferredSection id="about" component={AboutSection} />
-        <DeferredSection id="experience" component={ExperienceSection} />
-        <DeferredSection id="services" component={ServicesSection} />
-        <DeferredSection id="projects" component={ProjectsSection} />
-        <DeferredSection id="contact" component={ContactSection} />
-      </main>
-      <DeferredFooter />
-      <DeferredBackToTop />
-    </div>
+    <>
+      <AnimatePresence mode="wait">
+        {!isSiteLoaded && (
+          <Preloader onComplete={handlePreloaderComplete} />
+        )}
+      </AnimatePresence>
+      <div className="min-h-screen flex flex-col font-inter antialiased bg-black relative">
+        <ScrollHUDTracker />
+        <Navbar />
+        <main className="flex-1">
+          <HeroSection />
+          <TechStackSection />
+          <DeferredSection id="about" component={AboutSection} />
+          <DeferredSection id="experience" component={ExperienceSection} />
+          <DeferredSection id="services" component={ServicesSection} />
+          <DeferredSection id="projects" component={ProjectsSection} />
+          <DeferredSection id="contact" component={ContactSection} />
+        </main>
+        <DeferredFooter />
+        <DeferredBackToTop />
+      </div>
+    </>
   )
 }
 

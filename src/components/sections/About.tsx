@@ -1,6 +1,8 @@
 import { useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
 import SkillCard from '@/components/ui/SkillCard'
+import { ScrambledText } from '@/components/ui/ScrambledText'
+import { ParallaxOrb } from '@/components/ui/ParallaxOrb'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { skills, skillCategories, stats, categoryColor } from '@/lib/constants'
@@ -52,14 +54,16 @@ export default function AboutSection() {
     <section
       id="about"
       ref={sectionRef}
-      className="relative min-h-screen bg-[#0a0a0a] py-24 overflow-hidden"
+      className="relative min-h-screen bg-black py-24 overflow-hidden"
     >
       {/* Background orbs */}
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-20 left-10 w-[400px] h-[400px] rounded-full opacity-20"
-          style={{ background: 'radial-gradient(circle, rgba(200,53,58,0.4) 0%, transparent 70%)', filter: 'blur(80px)' }} />
-        <div className="absolute bottom-40 right-10 w-[300px] h-[300px] rounded-full opacity-15"
-          style={{ background: 'radial-gradient(circle, rgba(158,42,47,0.4) 0%, transparent 70%)', filter: 'blur(80px)' }} />
+        <ParallaxOrb className="absolute top-20 left-10 w-100 h-100 rounded-full opacity-20"
+          style={{ background: 'radial-gradient(circle, rgba(200,53,58,0.4) 0%, transparent 70%)', filter: 'blur(80px)' }}
+          speedX={0.02} speedY={0.02} scrollSpeed={-0.1} />
+        <ParallaxOrb className="absolute bottom-40 right-10 w-75 h-75 rounded-full opacity-15"
+          style={{ background: 'radial-gradient(circle, rgba(158,42,47,0.4) 0%, transparent 70%)', filter: 'blur(80px)' }}
+          speedX={-0.03} speedY={0.03} scrollSpeed={-0.08} />
       </div>
 
       <div className="relative z-10 max-w-6xl xl:max-w-7xl 3xl:max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-12">
@@ -71,7 +75,10 @@ export default function AboutSection() {
             <span className="text-xs sm:text-sm font-mono text-crimson-300">Get to know me</span>
           </div>
           <h2 className="text-4xl sm:text-5xl md:text-6xl xl:text-7xl font-black text-white mb-4">
-            About <span className="gradient-text">Me</span>
+            <ScrambledText text="About " />
+            <span className="gradient-text">
+              <ScrambledText text="Me" delay={200} />
+            </span>
           </h2>
           <p className="text-base sm:text-lg text-slate-400 max-w-2xl mx-auto px-2 sm:px-0">
             Passionate about building scalable solutions and crafting beautiful user experiences

@@ -10,7 +10,8 @@ import { IoMdMail } from 'react-icons/io'
 import { RiNextjsFill, RiTailwindCssFill } from 'react-icons/ri'
 import {
   SiTypescript, SiTailwindcss, SiFirebase, SiSupabase, SiMongodb, SiExpress,
-  SiPostgresql, SiRedis, SiPrisma, SiVite, SiPostman, SiJira, SiMysql
+  SiPostgresql, SiRedis, SiPrisma, SiVite, SiPostman, SiJira, SiMysql,
+  SiNestjs, SiSocketdotio, SiGraphql, SiDocker, SiMongoose
 } from 'react-icons/si'
 
 // Snake Game Constants
@@ -282,15 +283,20 @@ export const skills: Skill[] = [
   { icon: FaCss3Alt,       label: 'CSS3',                color: '#60a5fa', category: 'Frontend' },
   { icon: FaNodeJs,        label: 'Node.js',             color: '#22c55e', category: 'Backend'  },
   { icon: SiExpress,       label: 'Express.js',          color: '#e2e8f0', category: 'Backend'  },
-  { icon: SiMongodb,       label: 'MongoDB',             color: '#4ade80', category: 'Backend'  },
+  { icon: SiNestjs,        label: 'NestJS',              color: '#e0234e', category: 'Backend'  },
+  { icon: SiGraphql,       label: 'GraphQL',             color: '#e535ab', category: 'Backend'  },
+  { icon: SiSocketdotio,   label: 'Socket.io',           color: '#e2e8f0', category: 'Backend'  },
   { icon: SiFirebase,      label: 'Firebase',            color: '#fbbf24', category: 'Backend'  },
   { icon: SiSupabase,      label: 'Supabase',            color: '#4ade80', category: 'Backend'  },
+  { icon: SiMongodb,       label: 'MongoDB',             color: '#4ade80', category: 'Database' },
+  { icon: SiMongoose,      label: 'Mongoose',            color: '#880000', category: 'Database' },
   { icon: SiPostgresql,    label: 'PostgreSQL',          color: '#60a5fa', category: 'Database' },
   { icon: SiMysql,         label: 'MySQL',               color: '#60a5fa', category: 'Database' },
   { icon: SiRedis,         label: 'Redis',               color: '#f87171', category: 'Database' },
   { icon: SiPrisma,        label: 'Prisma',              color: '#e2e8f0', category: 'Database' },
   { icon: FaGitAlt,        label: 'Git',                 color: '#fb7185', category: 'Tools'    },
   { icon: FaGithub,        label: 'GitHub',              color: '#e2e8f0', category: 'Tools'    },
+  { icon: SiDocker,        label: 'Docker',              color: '#2496ed', category: 'Tools'    },
   { icon: SiVite,          label: 'Vite',                color: '#a78bfa', category: 'Tools'    },
   { icon: SiPostman,       label: 'Postman',             color: '#fb923c', category: 'Tools'    },
   { icon: FaNpm,           label: 'npm/yarn',            color: '#f87171', category: 'Tools'    },
@@ -304,7 +310,7 @@ export const skillCategories: SkillCategory[] = ['Frontend', 'Backend', 'Databas
 export const stats: Stat[] = [
   { value: '15+', label: 'Projects Built',   icon: FaCode     },
   { value: '3+',  label: 'Years Experience', icon: FaServer   },
-  { value: '25+', label: 'Technologies',     icon: FaDatabase },
+  { value: '28+', label: 'Technologies',     icon: FaDatabase },
   { value: '2025',label: 'CS Graduate',      icon: FaRocket   },
 ]
 

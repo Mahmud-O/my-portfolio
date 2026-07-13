@@ -12,14 +12,13 @@ export interface IconColor {
 // ============================================================================
 // Project Types
 // ============================================================================
-export type TechFilter = 'all' | 'react' | 'js' | 'nextjs' | 'html,css'
+export type TechFilter = 'all' | 'React' | 'JavaScript' | 'Next.js' | 'HTML/CSS'
 
 export interface Project {
   id: string
   title: string
   description: string
-  tech: string | string[]
-  techIcon?: IconColor
+  tags: string[]
   image: string
   liveUrl?: string
   githubUrl?: string

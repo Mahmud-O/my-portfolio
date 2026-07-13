@@ -4,6 +4,8 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import emailjs from '@emailjs/browser'
 import { FaCircleCheck, FaArrowRight } from 'react-icons/fa6'
 import MagneticLink from '@/components/ui/MagneticLink'
+import { ScrambledText } from '@/components/ui/ScrambledText'
+import { ParallaxOrb } from '@/components/ui/ParallaxOrb'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -69,20 +71,29 @@ export default function ContactSection() {
     }
 
     return (
-        <section id="contact" ref={sectionRef} className="bg-[#0a0a0a] pt-32 pb-24 relative overflow-hidden">
+        <section id="contact" ref={sectionRef} className="bg-black pt-32 pb-24 relative overflow-hidden">
             {/* Background decoration */}
-            <div className="pointer-events-none absolute bottom-0 right-0 w-[600px] h-[600px] opacity-10 rounded-full"
+            <ParallaxOrb className="pointer-events-none absolute bottom-0 right-0 w-150 h-150 opacity-10 rounded-full"
                 style={{ background: 'radial-gradient(circle, rgba(185,28,28,0.7) 0%, transparent 70%)', filter: 'blur(80px)' }}
+                speedX={-0.02}
+                speedY={0.03}
+                scrollSpeed={-0.07}
             />
-            <div className="pointer-events-none absolute top-0 left-0 w-[400px] h-[400px] opacity-10 rounded-full"
+            <ParallaxOrb className="pointer-events-none absolute top-0 left-0 w-100 h-100 opacity-10 rounded-full"
                 style={{ background: 'radial-gradient(circle, rgba(220,38,38,0.6) 0%, transparent 70%)', filter: 'blur(80px)' }}
+                speedX={0.03}
+                speedY={0.02}
+                scrollSpeed={-0.12}
             />
 
   <div className="max-w-5xl xl:max-w-6xl 3xl:max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 relative z-10">
       {/* Page header */}
       <div className="text-center mb-12 sm:mb-16">
         <h2 className="text-4xl sm:text-5xl md:text-6xl xl:text-7xl font-black text-white mb-4">
-          Contact <span className="gradient-text">Me</span>
+          <ScrambledText text="Contact " />
+          <span className="gradient-text">
+            <ScrambledText text="Me" delay={200} />
+          </span>
         </h2>
         <p className="text-slate-400 max-w-xl mx-auto text-base sm:text-lg px-2 sm:px-0">
           Have a project in mind? I&apos;d love to hear about it. Send me a message and let&apos;s build something great.

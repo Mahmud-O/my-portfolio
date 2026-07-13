@@ -13,7 +13,7 @@ const Footer = () => {
   const year = new Date().getFullYear()
 
   return (
-    <footer className="relative z-10 overflow-hidden bg-[#0a0a0a]">
+    <footer className="relative z-10 overflow-hidden bg-black">
       {/* Floating Back-to-Top Button */}
       {/* top glow line */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 max-w-3xl h-px

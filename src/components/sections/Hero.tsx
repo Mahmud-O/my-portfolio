@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { FaArrowRight, FaDownload, FaGithub } from 'react-icons/fa6'
-import { techStack, HERO_PHRASES } from '@/lib/heroData'
+import { HERO_PHRASES } from '@/lib/heroData'
+import { ParallaxOrb } from '@/components/ui/ParallaxOrb'
 
 const PROFILE_IMAGE_SRC = '/img/personal-portrait-768.jpg'
 const PROFILE_IMAGE_SRC_SET = [
@@ -21,7 +22,6 @@ export default function HeroSection() {
   const subRef = useRef<HTMLDivElement>(null)
   const descRef = useRef<HTMLParagraphElement>(null)
   const ctaRef = useRef<HTMLDivElement>(null)
-  const techRef = useRef<HTMLDivElement>(null)
   const scrollRef = useRef<HTMLDivElement>(null)
   const cursorRef = useRef<HTMLSpanElement>(null)
 
@@ -54,6 +54,7 @@ export default function HeroSection() {
   useEffect(() => {
     let mounted = true
     let cleanup: (() => void) | undefined
+    let hasLoadedListener = false
 
     const runAnimation = async () => {
       const { default: gsap } = await import('gsap')
@@ -95,7 +96,6 @@ export default function HeroSection() {
         tl.fromTo(subRef.current, { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.6 }, 0.55)
         tl.fromTo(descRef.current, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.6 }, 0.75)
         tl.fromTo(ctaRef.current, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.6 }, 0.9)
-        tl.fromTo(techRef.current, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.6 }, 1.05)
         tl.fromTo(scrollRef.current, { opacity: 0 }, { opacity: 1, duration: 0.6 }, 1.3)
 
         gsap.to(cursorRef.current, {
@@ -111,12 +111,26 @@ export default function HeroSection() {
     }
 
     const startAnimation = () => {
+      if (!mounted) return
       void runAnimation()
     }
 
+    const handleLoaded = () => {
+      startAnimation()
+    }
+
+    const checkAndStart = () => {
+      if (window.__portfolioLoaded) {
+        startAnimation()
+      } else {
+        window.addEventListener('portfolio-loaded', handleLoaded)
+        hasLoadedListener = true
+      }
+    }
+
     const idleId = window.requestIdleCallback
-      ? window.requestIdleCallback(startAnimation, { timeout: 1500 })
-      : window.setTimeout(startAnimation, 250)
+      ? window.requestIdleCallback(checkAndStart, { timeout: 1500 })
+      : window.setTimeout(checkAndStart, 250)
 
     return () => {
       mounted = false
@@ -125,6 +139,9 @@ export default function HeroSection() {
       } else {
         window.clearTimeout(idleId)
       }
+      if (hasLoadedListener) {
+        window.removeEventListener('portfolio-loaded', handleLoaded)
+      }
       cleanup?.()
     }
   }, [])
@@ -132,7 +149,7 @@ export default function HeroSection() {
   return (
     <section id="hero" ref={containerRef} className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden bg-grid">
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
-        <div
+        <ParallaxOrb
           className="anim-orb-1 absolute rounded-full opacity-30 w-75 h-75 sm:w-100 sm:h-100 md:w-125 md:h-125 lg:w-150 lg:h-150 xl:w-175 xl:h-175"
           style={{
             top: '-10%',
@@ -140,8 +157,11 @@ export default function HeroSection() {
             background: 'radial-gradient(circle, rgba(220,38,38,0.55) 0%, rgba(220,38,38,0) 70%)',
             filter: 'blur(60px)',
           }}
+          speedX={0.03}
+          speedY={0.03}
+          scrollSpeed={-0.12}
         />
-        <div
+        <ParallaxOrb
           className="anim-orb-2 absolute rounded-full opacity-25 w-62.5 h-62.5 sm:w-87.5 sm:h-87.5 md:w-100 md:h-100 lg:w-125 lg:h-125 xl:w-150 xl:h-150"
           style={{
             bottom: '-5%',
@@ -149,8 +169,11 @@ export default function HeroSection() {
             background: 'radial-gradient(circle, rgba(185,28,28,0.45) 0%, rgba(185,28,28,0) 70%)',
             filter: 'blur(60px)',
           }}
+          speedX={-0.04}
+          speedY={0.02}
+          scrollSpeed={-0.08}
         />
-        <div
+        <ParallaxOrb
           className="anim-orb-3 absolute rounded-full opacity-15 w-50 h-50 sm:w-62.5 sm:h-62.5 md:w-75 md:h-75 lg:w-87.5 lg:h-87.5 xl:w-112.5 xl:h-112.5"
           style={{
             top: '40%',
@@ -158,6 +181,9 @@ export default function HeroSection() {
             background: 'radial-gradient(circle, rgba(220,38,38,0.12) 0%, rgba(220,38,38,0) 70%)',
             filter: 'blur(80px)',
           }}
+          speedX={0.02}
+          speedY={-0.03}
+          scrollSpeed={-0.15}
         />
       </div>
 
@@ -240,74 +266,45 @@ export default function HeroSection() {
 
           <div
             ref={portraitRef}
-            className="relative order-first lg:order-0 mx-auto lg:mx-0 lg:justify-self-end w-30 h-30 sm:w-36 sm:h-36 lg:w-72 lg:h-72 xl:w-82 xl:h-82 rounded-full p-0.5 lg:p-0.75 bg-linear-to-br from-red-400/80 via-red-600/60 to-white/20 shadow-[0_18px_70px_rgba(220,38,38,0.25)] lg:shadow-[0_28px_100px_rgba(220,38,38,0.3)]"
+            className="relative order-first lg:order-0 mx-auto lg:mx-0 lg:justify-self-end w-30 h-30 sm:w-36 sm:h-36 lg:w-72 lg:h-72 xl:w-82 xl:h-82"
             style={{ opacity: 0 }}
           >
-            <div className="relative w-full h-full rounded-full overflow-hidden bg-bg-surface border border-white/10">
-              {profileImageAvailable ? (
-                <img
-                  src={PROFILE_IMAGE_SRC}
-                  srcSet={PROFILE_IMAGE_SRC_SET}
-                  sizes="(min-width: 1280px) 328px, (min-width: 1024px) 288px, (min-width: 640px) 144px, 120px"
-                  alt="Mahmoud Osama portrait"
-                  width={768}
-                  height={768}
-                  decoding="async"
-                  fetchPriority="high"
-                  onError={() => setProfileImageAvailable(false)}
-                  className="w-full h-full object-cover object-center"
-                />
-              ) : (
-                <div className="w-full h-full flex items-center justify-center bg-linear-to-br from-slate-900 to-[#0a0a0a] text-3xl sm:text-4xl lg:text-7xl font-black gradient-text">
-                  MO
-                </div>
-              )}
-            </div>
-            <span className="absolute right-3 bottom-3 lg:right-7 lg:bottom-7 w-5 h-5 lg:w-7 lg:h-7 rounded-full bg-green-400 border-4 border-[#0a0a0a] shadow-[0_0_18px_rgba(74,222,128,0.7)]" />
-          </div>
-        </div>
+            {/* Isolated Crop Container */}
+            <div className="relative w-full h-full rounded-full overflow-hidden p-[2.5px] bg-black shadow-[0_18px_70px_rgba(220,38,38,0.25)] lg:shadow-[0_28px_100px_rgba(220,38,38,0.3)]">
 
-        <div ref={techRef} className="w-full mt-12 lg:mt-16" style={{ opacity: 0 }}>
-          <p className="text-xs lg:text-sm text-slate-600 uppercase tracking-widest font-mono text-center mb-4">
-            Tech Stack
-          </p>
-          <div
-            className="relative overflow-hidden"
-            style={{
-              maskImage: 'linear-gradient(to right, transparent 0, #000 8%, #000 92%, transparent 100%)',
-              WebkitMaskImage: 'linear-gradient(to right, transparent 0, #000 8%, #000 92%, transparent 100%)',
-            }}
-          >
+              {/* Conic Gradient rotating inside cropped frame */}
+              <div
+                className="absolute inset-[-100%] rounded-full animate-conic-rotate pointer-events-none z-0"
+                style={{
+                  background: 'conic-gradient(from 0deg, #dc2626 0%, #ef4444 25%, transparent 50%, #b91c1c 75%, #dc2626 100%)',
+                }}
+              />
 
-            <div
-              className="flex gap-3 lg:gap-4 whitespace-nowrap w-max mb-3 animate-marquee-left"
-              style={{ animationDuration: '22s' }}
-            >
-              {[...techStack, ...techStack].map(({ icon: Icon, label, color }, i) => (
-                <span
-                  key={i}
-                  className="inline-flex items-center gap-2 px-4 lg:px-5 py-2 lg:py-2.5 rounded-full glass text-xs lg:text-sm text-slate-300 font-mono shrink-0"
-                >
-                  <Icon size={13} className="lg:size-4" style={{ color }} />
-                  {label}
-                </span>
-              ))}
+              {/* Image Panel */}
+              <div className="relative z-10 w-full h-full rounded-full overflow-hidden bg-black border border-white/10">
+                {profileImageAvailable ? (
+                  <img
+                    src={PROFILE_IMAGE_SRC}
+                    srcSet={PROFILE_IMAGE_SRC_SET}
+                    sizes="(min-width: 1280px) 328px, (min-width: 1024px) 288px, (min-width: 640px) 144px, 120px"
+                    alt="Mahmoud Osama portrait"
+                    width={768}
+                    height={768}
+                    decoding="async"
+                    fetchPriority="high"
+                    onError={() => setProfileImageAvailable(false)}
+                    className="w-full h-full object-cover object-center"
+                  />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center bg-linear-to-br from-slate-900 to-black text-3xl sm:text-4xl lg:text-7xl font-black gradient-text">
+                    MO
+                  </div>
+                )}
+              </div>
             </div>
 
-            <div
-              className="flex gap-3 lg:gap-4 whitespace-nowrap w-max animate-marquee-right"
-              style={{ animationDuration: '28s' }}
-            >
-              {[...techStack, ...techStack].map(({ icon: Icon, label, color }, i) => (
-                <span
-                  key={i}
-                  className="inline-flex items-center gap-2 px-4 lg:px-5 py-2 lg:py-2.5 rounded-full glass text-xs lg:text-sm text-slate-300 font-mono shrink-0"
-                >
-                  <Icon size={13} className="lg:size-4" style={{ color }} />
-                  {label}
-                </span>
-              ))}
-            </div>
+            {/* Status Dot (Remains Unclipped outside Crop Area) */}
+            <span className="absolute right-3 bottom-3 lg:right-7 lg:bottom-7 w-5 h-5 lg:w-7 lg:h-7 rounded-full bg-green-400 border-4 border-black shadow-[0_0_18px_rgba(74,222,128,0.7)] z-20" />
           </div>
         </div>
       </div>
@@ -320,7 +317,7 @@ export default function HeroSection() {
         <span className="text-[10px] md:text-xs text-slate-500 uppercase tracking-widest font-mono">
           Scroll
         </span>
-        <div className="w-px h-8 md:h-12 bg-linear-to-b from-slate-500 to-transparent" />
+        <div className="w-px h-8 md:h-12 lg:h-14 bg-linear-to-b from-slate-500 to-transparent" />
       </div>
     </section>
   )

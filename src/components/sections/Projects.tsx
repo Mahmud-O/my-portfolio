@@ -3,34 +3,38 @@ import { projects } from '@/lib/data/projects'
 import { TechFilter } from '@/lib/types'
 import { LuSearch } from 'react-icons/lu'
 import ProjectCard from './ProjectCard'
+import { ScrambledText } from '@/components/ui/ScrambledText'
 
 const filters: { id: TechFilter; label: string }[] = [
   { id: 'all', label: 'All' },
-  { id: 'react', label: 'React' },
-  { id: 'js', label: 'JavaScript' },
-  { id: 'html,css', label: 'HTML/CSS' },
+  { id: 'React', label: 'React' },
+  { id: 'JavaScript', label: 'JavaScript' },
+  { id: 'HTML/CSS', label: 'HTML/CSS' },
 ]
 
 export default function ProjectsSection() {
-  const [activeFilter, setActiveFilter] = useState<TechFilter>('react')
+  const [activeFilter, setActiveFilter] = useState<TechFilter>('React')
 
-  const getTech = (p: { tech: string | string[] }): string => {
-    if (Array.isArray(p.tech)) return p.tech[0]
-    return p.tech
+  const matchesFilter = (tags: string[], filter: TechFilter): boolean => {
+    if (filter === 'HTML/CSS') return tags.some(t => t.startsWith('HTML') || t.startsWith('CSS'))
+    return tags.some(t => t.startsWith(filter))
   }
 
   const filtered = (
     activeFilter === 'all'
       ? [...projects]
-      : projects.filter((p) => getTech(p) === activeFilter)
+      : projects.filter((p) => matchesFilter(p.tags, activeFilter))
   ).reverse()
 
   return (
-    <section id="projects" className="min-h-screen bg-[#0a0a0a] pt-32 pb-24 relative overflow-hidden">
+    <section id="projects" className="min-h-screen bg-black pt-32 pb-24 relative overflow-hidden">
       <div className="max-w-6xl xl:max-w-7xl 3xl:max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 relative z-10">
         <div className="mb-12 text-center">
           <h2 className="text-4xl sm:text-5xl md:text-6xl xl:text-7xl font-black text-white mb-4">
-            My <span className="gradient-text">Projects</span>
+            <ScrambledText text="My " />
+            <span className="gradient-text">
+              <ScrambledText text="Projects" delay={150} />
+            </span>
           </h2>
           <p className="text-base sm:text-lg text-slate-400 max-w-xl mx-auto px-2 sm:px-0">
             A collection of full-stack applications and projects I&apos;ve built.

@@ -1,21 +1,12 @@
-import { FaJsSquare } from 'react-icons/fa'
-import { FaReact, FaHtml5, FaCss3Alt } from 'react-icons/fa6'
-import { RiNextjsFill } from 'react-icons/ri'
 import { Project } from '@/lib/types'
 
 export const projects: Project[] = [
-    
     {
         id: '1',
         title: 'ShopFlow-ECommerce',
         description:
-            'Full-featured e-commerce platform built with React, Redux Toolkit, React Query & Tailwind CSS.',
-        tech: 'react',
-        techIcon: {
-            icon: FaReact,
-            bg: 'bg-sky-500/10',
-            color: 'text-sky-400',
-        },
+            'Production-grade e-commerce platform featuring centralized state via Redux Toolkit, server-state caching with React Query, and a fully responsive storefront styled with Tailwind CSS.',
+        tags: ['React', 'Redux Toolkit', 'React Query', 'Tailwind CSS'],
         image: '/img/projects/project-01.jpg',
         liveUrl: 'https://shopflow-ecommerce.netlify.app/',
         featured: true,
@@ -25,13 +16,8 @@ export const projects: Project[] = [
         id: '2',
         title: 'TaskFlow-Task-Manager',
         description:
-            'Clean & minimal To-Do app with localStorage persistence using Vanilla JavaScript.',
-        tech: 'js',
-        techIcon: {
-            icon: FaJsSquare,
-            bg: 'bg-yellow-500/20',
-            color: 'text-yellow-400',
-        },
+            'Lightweight task management app with full CRUD operations and localStorage persistence, built entirely in Vanilla JavaScript with a clean, modular architecture.',
+        tags: ['JavaScript', 'LocalStorage', 'DOM API'],
         image: '/img/projects/project-02.jpg',
         liveUrl: 'https://mahmoud25osama.github.io/To-Do-List/',
         featured: true,
@@ -41,13 +27,8 @@ export const projects: Project[] = [
         id: '3',
         title: 'CreatorPreneur-Landing-Page',
         description:
-            'Modern landing page with React, Tailwind, Sanity CMS, RTL support & dark mode.',
-        tech: 'react',
-        techIcon: {
-            icon: FaReact,
-            bg: 'bg-sky-500/10',
-            color: 'text-sky-400',
-        },
+            'High-conversion landing page powered by Sanity CMS for dynamic content, featuring full RTL/LTR layout support, dark mode theming, and fluid scroll animations via Framer Motion.',
+        tags: ['React', 'Sanity CMS', 'Framer Motion', 'RTL'],
         image: '/img/projects/project-03.jpg',
         liveUrl: 'https://creatorpreneur-academy.netlify.app/',
         featured: true,
@@ -57,13 +38,8 @@ export const projects: Project[] = [
         id: '4',
         title: 'Portfolio-V1',
         description:
-            'My first professional portfolio built with Next.js and Tailwind CSS.',
-        tech: 'nextjs',
-        techIcon: {
-            icon: RiNextjsFill,
-            bg: 'bg-white/10',
-            color: 'text-white',
-        },
+            'First-generation developer portfolio built with Next.js SSR, optimized SEO meta tags, and utility-first styling via Tailwind CSS.',
+        tags: ['Next.js', 'Tailwind CSS', 'SSR'],
         image: '/img/projects/project-04.jpg',
         liveUrl: 'https://github.com/mahmoud25osama/Portfolio-V1',
         year: 2024,
@@ -72,13 +48,8 @@ export const projects: Project[] = [
         id: '5',
         title: 'Weather-App',
         description:
-            'Beautiful glassmorphism weather dashboard with real-time data and forecasts.',
-        tech: 'js',
-        techIcon: {
-            icon: FaJsSquare,
-            bg: 'bg-yellow-500/20',
-            color: 'text-yellow-400',
-        },
+            'Glassmorphism-styled weather dashboard with real-time API fetching, 5-day forecasts, and geolocation-based city detection — built with Vanilla JavaScript.',
+        tags: ['JavaScript', 'REST API', 'Geolocation'],
         image: '/img/projects/project-05.jpg',
         liveUrl: 'https://mahmoud25osama.github.io/Weather-Dashboard/',
         year: 2024,
@@ -87,13 +58,8 @@ export const projects: Project[] = [
         id: '6',
         title: 'Streamflix-Clone',
         description:
-            'Netflix clone with authentication, protected routes, search & pixel-perfect UI.',
-        tech: 'react',
-        techIcon: {
-            icon: FaReact,
-            bg: 'bg-sky-500/10',
-            color: 'text-sky-400',
-        },
+            'Feature-rich Netflix clone with secure JWT authentication, protected route guards, dynamic search with debounced queries, and a pixel-perfect responsive UI.',
+        tags: ['React', 'JWT Auth', 'Protected Routes', 'TMDB API'],
         image: '/img/projects/project-06.jpg',
         liveUrl: 'https://streamflix25.netlify.app',
         year: 2025,
@@ -102,28 +68,18 @@ export const projects: Project[] = [
         id: '7',
         title: 'Ali-Dynasty-Chronicles',
         description:
-            'Interactive bilingual website about Muhammad Ali Pasha dynasty (1805-1952).',
-        tech: 'react',
-        techIcon: {
-            icon: FaReact,
-            bg: 'bg-sky-500/10',
-            color: 'text-sky-400',
-        },
+            'Interactive bilingual historical platform chronicling the Muhammad Ali Pasha dynasty (1805–1952), featuring scroll-driven GSAP timeline animations and full Arabic/English language support.',
+        tags: ['React', 'GSAP', 'TypeScript', 'i18n'],
         image: '/img/projects/project-07.jpg',
-        liveUrl: 'https://ali-dynasty-chronicles.netlify.app/',
+        liveUrl: 'https://ali-dynasty-chronicles.vercel.app/',
         year: 2025,
     },
     {
         id: '8',
         title: 'Meal-Explorer',
         description:
-            'Recipe discovery app with meal categories and detailed cooking instructions.',
-        tech: 'react',
-        techIcon: {
-            icon: FaReact,
-            bg: 'bg-sky-500/10',
-            color: 'text-sky-400',
-        },
+            'Recipe discovery app with optimized API fetching, category-based filtering, detailed cooking instructions, and responsive card layouts styled with Tailwind CSS.',
+        tags: ['React', 'REST API', 'Tailwind CSS', 'Filtering'],
         image: '/img/projects/project-08.jpg',
         liveUrl: 'https://meal25explorer.netlify.app/',
         year: 2025,
@@ -132,13 +88,8 @@ export const projects: Project[] = [
         id: '9',
         title: 'Text-Color-Range',
         description:
-            'Real-time text color changer using RGB sliders (Vanilla JS + Bootstrap).',
-        tech: 'js',
-        techIcon: {
-            icon: FaJsSquare,
-            bg: 'bg-yellow-500/20',
-            color: 'text-yellow-400',
-        },
+            'Real-time text color manipulation tool using RGB range sliders, built with Vanilla JavaScript and Bootstrap for instant visual feedback.',
+        tags: ['JavaScript', 'Bootstrap', 'DOM API'],
         image: '/img/projects/project-09.jpg',
         liveUrl: 'https://mahmoud25osama.github.io/Text-Color-Range/',
         year: 2025,
@@ -147,13 +98,8 @@ export const projects: Project[] = [
         id: '10',
         title: 'Library-App',
         description:
-            'Simple book library app with add/remove functionality and localStorage.',
-        tech: 'js',
-        techIcon: {
-            icon: FaJsSquare,
-            bg: 'bg-yellow-500/20',
-            color: 'text-yellow-400',
-        },
+            'Personal book library manager with full CRUD functionality and localStorage-backed persistence, featuring a clean UI and modular Vanilla JavaScript architecture.',
+        tags: ['JavaScript', 'LocalStorage', 'CRUD'],
         image: '/img/projects/project-10.jpg',
         liveUrl: 'https://mahmoud25osama.github.io/Library/',
         year: 2025,
@@ -162,13 +108,8 @@ export const projects: Project[] = [
         id: '11',
         title: 'Dashboard-HTML&CSS',
         description:
-            'Fully responsive dashboard template built with pure HTML & CSS.',
-        tech: 'html,css',
-        techIcon: {
-            icon: FaHtml5,
-            bg: 'bg-orange-500/20',
-            color: 'text-orange-500',
-        },
+            'Fully responsive admin dashboard template with semantic HTML5 markup, CSS Grid/Flexbox layouts, and mobile-first breakpoints — zero JavaScript dependencies.',
+        tags: ['HTML5', 'CSS3', 'Grid', 'Responsive'],
         image: '/img/projects/project-11.jpg',
         liveUrl: 'https://mahmoud25osama.github.io/Dashboard_Html_Css/',
         year: 2025,
@@ -177,13 +118,8 @@ export const projects: Project[] = [
         id: '12',
         title: 'Leon-Agency-Template',
         description:
-            'Modern flat agency landing page converted from PSD to HTML/CSS.',
-        tech: 'html,css',
-        techIcon: {
-            icon: FaCss3Alt,
-            bg: 'bg-blue-500/20',
-            color: 'text-blue-400',
-        },
+            'Pixel-perfect PSD-to-code conversion of a modern flat agency landing page, built with semantic HTML and clean, maintainable CSS architecture.',
+        tags: ['HTML5', 'CSS3', 'PSD Conversion'],
         image: '/img/projects/project-12.jpg',
         liveUrl: 'https://mahmoud25osama.github.io/Html_Css_Template_one/',
         year: 2025,
@@ -191,13 +127,9 @@ export const projects: Project[] = [
     {
         id: '13',
         title: 'Kasper-Creative-Template',
-        description: 'Creative one-page portfolio template converted from PSD.',
-        tech: 'html,css',
-        techIcon: {
-            icon: FaCss3Alt,
-            bg: 'bg-blue-500/20',
-            color: 'text-blue-400',
-        },
+        description:
+            'Creative one-page portfolio template with pixel-perfect PSD-to-code conversion, smooth CSS transitions, and fully responsive cross-browser layouts.',
+        tags: ['HTML5', 'CSS3', 'PSD Conversion'],
         image: '/img/projects/project-13.jpg',
         liveUrl: 'https://mahmoud25osama.github.io/HTML_CSS_Template_Two/',
         year: 2025,
@@ -206,13 +138,8 @@ export const projects: Project[] = [
         id: '14',
         title: 'Elrouby-World-Template',
         description:
-            'Clean agency/portfolio template converted from PSD to code.',
-        tech: 'html,css',
-        techIcon: {
-            icon: FaHtml5,
-            bg: 'bg-orange-500/20',
-            color: 'text-orange-500',
-        },
+            'Clean agency/portfolio template meticulously converted from PSD to semantic, accessible HTML and modular CSS with responsive breakpoints.',
+        tags: ['HTML5', 'CSS3', 'Responsive', 'Accessibility'],
         image: '/img/projects/project-14.jpg',
         liveUrl:
             'https://mahmoud25osama.github.io/HTML_And_CSS_Template_Three/',
@@ -222,28 +149,18 @@ export const projects: Project[] = [
         id: '15',
         title: 'Animated-Login-Form',
         description:
-            'A lightweight, responsive animated login component built with HTML, CSS . This repository contains a simple, accessible login form with smooth animations that you can drop into any project or use as a starting point for a custom authentication UI.',
-        tech: 'html,css',
-        techIcon: {
-            icon: FaHtml5,
-            bg: 'bg-orange-500/20',
-            color: 'text-orange-500',
-        },
+            'Lightweight, accessible login component featuring smooth CSS keyframe animations and responsive design — drop-in ready for any authentication UI.',
+        tags: ['HTML5', 'CSS Animations', 'Responsive'],
         image: '/img/projects/project-15.jpg',
-        liveUrl: 'https://mahmoud25osama.github.io/Animated-Login/',
+        liveUrl: 'https://Mahmud-O.github.io/Animated-Login/',
         year: 2025,
     },
     {
         id: '16',
         title: 'PrepYou.ai',
         description:
-            'full-pipeline AI interview preparation platform built for software engineers. It simulates the real hiring process end-to-end — candidates choose their tech major and experience level, submit a job description, assign a target company, then go through AI-powered stages including CV review, MCQ assessment, HR interview, and a live technical interview with a coding challenge. At the end, the platform generates a detailed performance report with actionable feedback.',
-        tech: 'react',
-        techIcon: {
-            icon: FaReact,
-            bg: 'bg-blue-500/10',
-            color: 'text-blue-400',
-        },
+            'Full-pipeline AI interview preparation platform that simulates the real hiring process end-to-end — from CV review and MCQ assessment to live technical interviews with a coding challenge, powered by AI integrations, Shadcn UI components, and Framer Motion transitions. Generates detailed performance reports with actionable feedback.',
+        tags: ['React', 'AI Integration', 'Shadcn UI', 'Framer Motion'],
         image: '/img/projects/project-16.jpg',
         liveUrl: 'https://prepyouai-waiting-list.vercel.app/',
         featured: true,

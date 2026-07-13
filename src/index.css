@@ -7,11 +7,11 @@
   /* ── Custom breakpoints ──────────────────── */
   --breakpoint-xs: 475px;
 
-  --color-bg-base:      #0a0a0a;
+  --color-bg-base:      #000000;
   --color-bg-surface:   #111111;
   --color-bg-elevated:  #1a1a1a;
   --color-bg-card:      rgba(255, 255, 255, 0.04);
-  --color-slate-950: #0a0a0a;
+  --color-slate-950: #000000;
   --color-slate-900: #171717;
   --color-slate-800: #262626;
   --color-slate-700: #404040;   /* subtle borders, dividers   */
@@ -117,7 +117,7 @@
   }
 
   body {
-    background-color: #0a0a0a;
+    background-color: #000000;
     color: #a8a29e;
     font-family: 'Inter', system-ui, sans-serif;
     -webkit-font-smoothing: antialiased;
@@ -144,7 +144,7 @@
   }
 
   ::-webkit-scrollbar { width: 6px; }
-  ::-webkit-scrollbar-track  { background: #0a0a0a; }
+  ::-webkit-scrollbar-track  { background: #000000; }
   ::-webkit-scrollbar-thumb  { background: #dc2626; border-radius: 9999px; }
   ::-webkit-scrollbar-thumb:hover { background: #ef4444; }
 }
@@ -251,10 +251,19 @@
     content: '';
     position: fixed;
     inset: 0;
-    opacity: 0.035;
+    opacity: 0.018;
+    mix-blend-mode: overlay;
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
     pointer-events: none;
     z-index: 9999;
+  }
+
+  @keyframes rotate-conic {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  .animate-conic-rotate {
+    animation: rotate-conic 6s linear infinite;
   }
 
   /* ── Custom cursor ───────────────────────── */

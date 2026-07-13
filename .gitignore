@@ -43,3 +43,10 @@ next-env.d.ts
 
 # vite
 dist/
+
+
+.idea/
+.codex/
+.claude/
+.agents/
+design-system/mahmoud-osama-portfolio/
