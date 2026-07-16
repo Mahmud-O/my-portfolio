@@ -1,6 +1,5 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { motion, useMotionValue, useTransform } from 'framer-motion'
-import { ScrambledText } from '@/components/ui/ScrambledText'
 import { ParallaxOrb } from '@/components/ui/ParallaxOrb'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
@@ -10,78 +9,198 @@ import { createCardVariants, iconBoxVariants, featureVariants, featureItemVarian
 
 gsap.registerPlugin(ScrollTrigger)
 
-const cardVariants = createCardVariants(-10, 1.03, '0 28px 70px rgba(0,0,0,0.55), 0 0 0 1px rgba(255,255,255,0.1)');
+const cardVariants = createCardVariants(-10, 1.03, '0 28px 70px rgba(0,0,0,0.55), 0 0 0 1px rgba(255,255,255,0.1)')
+
+// Accent colors for each card to fade the solid background to on active scroll
+const servicesBgColors = [
+  '#2a0406', // 1. Red Accent
+  '#7f1d1d', // 2. Dark Deep Red
+  '#13031f', // 3. Glowing Purple
+  '#031707', // 4. Glowing Green
+  '#17020d', // 5. Pink Accented
+  '#140d01', // 6. Yellow / Amber Accent
+]
 
 export default function ServicesSection() {
   const sectionRef = useRef<HTMLElement>(null)
-  const headerRef = useRef<HTMLDivElement>(null)
-  const trackRef = useRef<HTMLDivElement>(null)
+  const cardsRef = useRef<(HTMLDivElement | null)[]>([])
+  const bgRefs = useRef<(HTMLDivElement | null)[]>([])
+  const textRefs = useRef<(HTMLHeadingElement | null)[]>([])
 
-  useEffect(() => {
-    const section = sectionRef.current
-    const header = headerRef.current
-    const track = trackRef.current
-    if (!section || !header || !track) return
+  const displayServices = [
+    ...services,
+    {
+      title: 'Virtual Card',
+      description: 'Virtual Card',
+      icon: services[0].icon,
+      accent: 'transparent',
+      features: [],
+      image: '',
+      isVirtual: true,
+    }
+  ]
 
-    // Header Animation
-    gsap.fromTo(
-      header,
-      { opacity: 0, y: 40 },
-      {
-        opacity: 1,
-        y: 0,
-        duration: 0.8,
-        ease: 'power3.out',
-        scrollTrigger: {
-          trigger: header,
-          start: 'top 85%',
-          toggleActions: 'play none none none',
-        }
+  const handleMobileScroll = (e: React.UIEvent<HTMLDivElement>) => {
+    if (window.innerWidth >= 769) return
+    const container = e.target as HTMLDivElement
+    const center = container.scrollLeft + container.offsetWidth / 2
+
+    let activeIdx = 0
+    let minDiff = Infinity
+
+    cardsRef.current.forEach((card, i) => {
+      if (!card || displayServices[i]?.isVirtual) return
+      const cardCenter = card.offsetLeft + card.offsetWidth / 2
+      const diff = Math.abs(cardCenter - center)
+      if (diff < minDiff) {
+        minDiff = diff
+        activeIdx = i
       }
-    )
+    })
 
-    // Staggered Cards Reveal Animation
-    gsap.fromTo(
-      track.querySelectorAll('.service-card'),
-      { opacity: 0, y: 40, scale: 0.96 },
-      {
-        opacity: 1,
-        y: 0,
-        scale: 1,
-        duration: 0.6,
-        stagger: 0.1,
-        ease: 'back.out(1.2)',
-        scrollTrigger: {
-          trigger: track,
-          start: 'top 80%',
-          toggleActions: 'play none none none',
-        }
+    cardsRef.current.forEach((card, i) => {
+      if (card) {
+        gsap.to(card, {
+          scale: i === activeIdx ? 1 : 0.9,
+          duration: 0.4,
+          ease: 'power2.out',
+          overwrite: 'auto',
+        })
       }
-    )
+    })
+
+    bgRefs.current.forEach((bg, i) => {
+      if (bg) {
+        gsap.to(bg, {
+          opacity: i === activeIdx ? 1 : 0,
+          duration: 0.4,
+          overwrite: 'auto',
+        })
+      }
+    })
+
+    textRefs.current.forEach((txt, i) => {
+      if (txt) {
+        gsap.to(txt, {
+          opacity: i === activeIdx ? 1 : 0,
+          duration: 0.4,
+          overwrite: 'auto',
+        })
+      }
+    })
+  }
+
+  useLayoutEffect(() => {
+    let ctx = gsap.context(() => {
+      let mm = gsap.matchMedia()
+
+      mm.add('(min-width: 769px)', () => {
+        // Position card indices arced along the virtual massive circle
+        const updateCards = (p: number) => {
+          cardsRef.current.forEach((card, i) => {
+            if (!card) return
+            const offset = i - p
+
+            // Perfect circular bend formulas
+            const radius = 1800 // Circle radius below viewport
+            const angleSpread = 18 // Degrees spread between cards
+
+            const angle = offset * angleSpread
+            const rad = (angle * Math.PI) / 180
+
+            const x = Math.sin(rad) * radius
+            const y = radius - Math.cos(rad) * radius // Drops down along arcing curve
+            const z = -Math.abs(offset) * 50
+
+            const scale = Math.max(0.4, 1 - Math.abs(offset) * 0.15)
+            const rotateZ = angle // Tilt arcing tangentially
+            const opacity = Math.max(0.1, 1 - Math.abs(offset) * 0.3)
+            const zIndex = Math.round(100 - Math.abs(offset) * 10)
+
+            gsap.set(card, {
+              x,
+              y,
+              z,
+              scale,
+              rotationZ: rotateZ,
+              rotationY: 0,
+              opacity: displayServices[i]?.isVirtual ? 0 : opacity,
+              zIndex,
+            })
+          })
+
+          // Fade backgrounds & headers according to active scroll index
+          bgRefs.current.forEach((bg, i) => {
+            if (!bg) return
+            const itemOpacity = Math.max(0, 1 - Math.abs(i - p))
+            gsap.set(bg, { opacity: itemOpacity })
+
+            if (textRefs.current[i]) {
+              gsap.set(textRefs.current[i], { opacity: itemOpacity })
+            }
+          })
+        }
+
+        // Initialize positions
+        updateCards(0)
+
+        // Pinned view scrub trigger
+        ScrollTrigger.create({
+          trigger: sectionRef.current,
+          start: 'top top',
+          end: '+=500%', // 500vh scroll depth duration
+          pin: true,
+          scrub: 1,
+          onUpdate: (self) => {
+            const p = self.progress * (displayServices.length - 1)
+            updateCards(p)
+          },
+        })
+      })
+
+      mm.add('(max-width: 768px)', () => {
+        // Reset properties on mobile layout
+        cardsRef.current.forEach((card, i) => {
+          if (card) {
+            gsap.set(card, { clearProps: 'x,y,z,rotation,scale,opacity,position' })
+            gsap.set(card, { scale: i === 0 ? 1 : 0.9 })
+          }
+        })
+
+        bgRefs.current.forEach((bg, i) => {
+          if (bg) gsap.set(bg, { clearProps: 'all', opacity: i === 0 ? 1 : 0 })
+        })
+
+        textRefs.current.forEach((txt, i) => {
+          if (txt) gsap.set(txt, { clearProps: 'all', opacity: i === 0 ? 1 : 0 })
+        })
+      })
+    }, sectionRef)
+
+    return () => ctx.revert()
   }, [])
 
   return (
     <section
       id="services"
       ref={sectionRef}
-      className="relative min-h-screen bg-black py-24 sm:py-32 overflow-hidden"
+      className="relative w-full h-screen bg-black overflow-hidden flex items-center justify-center md:[perspective:1000px] border-t border-white/5"
     >
-      <div className="absolute inset-0 pointer-events-none">
+      {/* Background Orbs */}
+      <div className="absolute inset-0 pointer-events-none z-10 opacity-20">
         <ParallaxOrb
-          className="absolute top-40 right-20 w-100 h-100 rounded-full opacity-15"
+          className="absolute top-40 right-20 w-56 h-56 md:w-100 md:h-100 rounded-full"
           style={{
-            background: 'radial-gradient(circle, rgba(200,53,58,0.4) 0%, transparent 70%)',
-            filter: 'blur(80px)',
+            background: 'radial-gradient(circle, rgba(220,53,58,0.2) 0%, rgba(220,53,58,0.06) 50%, transparent 100%)',
           }}
           speedX={0.03}
           speedY={0.02}
           scrollSpeed={-0.12}
         />
         <ParallaxOrb
-          className="absolute bottom-20 left-10 w-87.5 h-87.5 rounded-full opacity-15"
+          className="absolute bottom-20 left-10 w-48 h-48 md:w-87.5 md:h-87.5 rounded-full"
           style={{
-            background: 'radial-gradient(circle, rgba(158,42,47,0.3) 0%, transparent 70%)',
-            filter: 'blur(80px)',
+            background: 'radial-gradient(circle, rgba(158,42,47,0.15) 0%, rgba(158,42,47,0.04) 50%, transparent 100%)',
           }}
           speedX={-0.02}
           speedY={0.04}
@@ -89,35 +208,53 @@ export default function ServicesSection() {
         />
       </div>
 
-      <div className="relative z-10 w-full max-w-6xl xl:max-w-7xl 3xl:max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 mb-12 sm:mb-16">
-        <div ref={headerRef} className="text-center" style={{ opacity: 0 }}>
-          <div className="inline-flex items-center gap-2 px-3 sm:px-4 py-2 rounded-full glass mb-4 sm:mb-6">
-            <span className="w-2 h-2 rounded-full bg-crimson-500 animate-pulse" />
-            <span className="text-xs sm:text-sm font-mono text-crimson-300">What I Offer</span>
-          </div>
-          <h2 className="text-4xl sm:text-5xl md:text-6xl xl:text-7xl font-black text-white mb-4">
-            <ScrambledText text="My " />
-            <span className="gradient-text">
-              <ScrambledText text="Services" delay={150} />
-            </span>
-          </h2>
-          <p className="text-base sm:text-lg text-slate-400 max-w-2xl mx-auto px-2 sm:px-0">
-            Comprehensive web development solutions tailored to your needs
-          </p>
-        </div>
+      {/* Dynamic Crimson/Charcoal background colors */}
+      {displayServices.map((_, i) => (
+        <div
+          key={`bg-${i}`}
+          ref={(el) => {
+            bgRefs.current[i] = el
+          }}
+          className="absolute inset-0 z-0 pointer-events-none opacity-0 transition-colors duration-500"
+          style={{ backgroundColor: servicesBgColors[i] || '#000000' }}
+        />
+      ))}
+
+      {/* Watermark Titles */}
+      <div className="absolute inset-0 flex items-center justify-center z-0 pointer-events-none select-none">
+        {displayServices.map((_, i) => (
+          <h1
+            key={`text-${i}`}
+            ref={(el) => {
+              textRefs.current[i] = el
+            }}
+            className="absolute text-[22vw] md:text-[18vw] font-black uppercase text-transparent leading-none tracking-tighter mix-blend-overlay"
+            style={{
+              WebkitTextStroke: '2px rgba(255,255,255,0.15)',
+              opacity: 0,
+            }}
+          >
+            SERVICES
+          </h1>
+        ))}
       </div>
 
-      <div className="relative z-10 w-full max-w-6xl xl:max-w-7xl 3xl:max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-12">
-        <div
-          ref={trackRef}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8"
-        >
-          {services.map((service, index) => (
-            <div key={service.title} className="w-full">
-              <ServiceCard service={service} index={index} />
-            </div>
-          ))}
-        </div>
+      {/* Circular Carousel (Desktop) or Snap Slider (Mobile) */}
+      <div
+        className="relative w-full h-full flex md:items-center md:justify-center z-10 md:[transform-style:preserve-3d] overflow-x-auto overflow-y-hidden md:overflow-visible snap-x snap-mandatory scrollbar-hide [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] items-center px-[10vw] md:px-0 gap-5 md:gap-0 touch-pan-x"
+        onScroll={handleMobileScroll}
+      >
+        {displayServices.map((service, i) => (
+          <div
+            key={service.title || `virtual-${i}`}
+            ref={(el) => {
+              cardsRef.current[i] = el
+            }}
+            className={`md:absolute relative shrink-0 snap-center w-[80vw] sm:w-[350px] md:w-[420px] h-[460px] md:h-[530px] rounded-[30px] flex flex-col justify-between will-change-transform z-10 pointer-events-auto ${service.isVirtual ? 'hidden md:flex opacity-0! pointer-events-none!' : ''}`}
+          >
+            {!service.isVirtual && <ServiceCard service={service} index={i} />}
+          </div>
+        ))}
       </div>
     </section>
   )
@@ -126,25 +263,45 @@ export default function ServicesSection() {
 function ServiceCard({ service, index }: { service: ServiceItem; index: number }) {
   const [hovered, setHovered] = useState(false)
   const rectRef = useRef<HTMLDivElement>(null)
+  const cardRectRef = useRef<DOMRect | null>(null)
+  const [isTouch, setIsTouch] = useState(false)
 
   const mouseX = useMotionValue(0)
   const mouseY = useMotionValue(0)
 
   // 3D Tilt calculations
-  const rotateX = useTransform(mouseY, [0, 300], [5, -5])
-  const rotateY = useTransform(mouseX, [0, 400], [-5, 5])
+  const rotateX = useTransform(mouseY, [0, 480], [4, -4])
+  const rotateY = useTransform(mouseX, [0, 420], [-4, 4])
+
+  useEffect(() => {
+    setIsTouch(window.matchMedia('(pointer: coarse)').matches)
+  }, [])
+
+  function handleMouseEnter() {
+    if (isTouch) return
+    setHovered(true)
+    if (rectRef.current) {
+      cardRectRef.current = rectRef.current.getBoundingClientRect()
+    }
+  }
 
   function handleMouseMove(e: React.MouseEvent<HTMLDivElement>) {
-    if (!rectRef.current) return
-    const rect = rectRef.current.getBoundingClientRect()
+    if (isTouch) return
+    if (!cardRectRef.current && rectRef.current) {
+      cardRectRef.current = rectRef.current.getBoundingClientRect()
+    }
+    const rect = cardRectRef.current
+    if (!rect) return
     mouseX.set(e.clientX - rect.left)
     mouseY.set(e.clientY - rect.top)
   }
 
   function handleMouseLeave() {
+    if (isTouch) return
     setHovered(false)
-    mouseX.set(200)
-    mouseY.set(150)
+    cardRectRef.current = null
+    mouseX.set(210)
+    mouseY.set(240)
   }
 
   const formattedIndex = String(index + 1).padStart(2, '0')
@@ -152,11 +309,11 @@ function ServiceCard({ service, index }: { service: ServiceItem; index: number }
   return (
     <motion.div
       ref={rectRef}
-      className="service-card group relative glass rounded-2xl p-6 cursor-default overflow-hidden border border-white/[0.07] h-[390px] flex flex-col justify-between"
+      className="group relative glass rounded-[30px] p-4 cursor-default overflow-hidden border border-white/[0.07] bg-[#101010]/85 h-full flex flex-col justify-between"
       initial="rest"
       whileHover="hover"
       onMouseMove={handleMouseMove}
-      onMouseEnter={() => setHovered(true)}
+      onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       variants={cardVariants}
       style={{
@@ -168,7 +325,7 @@ function ServiceCard({ service, index }: { service: ServiceItem; index: number }
     >
       {/* Interactive glowing border mask */}
       <motion.div
-        className="absolute inset-0 rounded-2xl pointer-events-none z-30"
+        className="absolute inset-0 rounded-[30px] pointer-events-none z-30"
         style={{
           background: useTransform(
             [mouseX, mouseY],
@@ -184,27 +341,39 @@ function ServiceCard({ service, index }: { service: ServiceItem; index: number }
 
       {/* Cybernetic geometric corners */}
       <div className="absolute inset-0 pointer-events-none z-20">
-        <div className="absolute top-0 left-0 w-3.5 h-3.5 border-t border-l transition-all duration-300 group-hover:w-4.5 group-hover:h-4.5" style={{ borderColor: hovered ? service.accent : 'rgba(255,255,255,0.2)' }} />
-        <div className="absolute top-0 right-0 w-3.5 h-3.5 border-t border-r transition-all duration-300 group-hover:w-4.5 group-hover:h-4.5" style={{ borderColor: hovered ? service.accent : 'rgba(255,255,255,0.2)' }} />
-        <div className="absolute bottom-0 left-0 w-3.5 h-3.5 border-b border-l transition-all duration-300 group-hover:w-4.5 group-hover:h-4.5" style={{ borderColor: hovered ? service.accent : 'rgba(255,255,255,0.2)' }} />
-        <div className="absolute bottom-0 right-0 w-3.5 h-3.5 border-b border-r transition-all duration-300 group-hover:w-4.5 group-hover:h-4.5" style={{ borderColor: hovered ? service.accent : 'rgba(255,255,255,0.2)' }} />
+        <div
+          className="absolute top-0 left-0 w-3.5 h-3.5 border-t border-l transition-all duration-300 group-hover:w-4.5 group-hover:h-4.5"
+          style={{ borderColor: hovered ? service.accent : 'rgba(255,255,255,0.2)' }}
+        />
+        <div
+          className="absolute top-0 right-0 w-3.5 h-3.5 border-t border-r transition-all duration-300 group-hover:w-4.5 group-hover:h-4.5"
+          style={{ borderColor: hovered ? service.accent : 'rgba(255,255,255,0.2)' }}
+        />
+        <div
+          className="absolute bottom-0 left-0 w-3.5 h-3.5 border-b border-l transition-all duration-300 group-hover:w-4.5 group-hover:h-4.5"
+          style={{ borderColor: hovered ? service.accent : 'rgba(255,255,255,0.2)' }}
+        />
+        <div
+          className="absolute bottom-0 right-0 w-3.5 h-3.5 border-b border-r transition-all duration-300 group-hover:w-4.5 group-hover:h-4.5"
+          style={{ borderColor: hovered ? service.accent : 'rgba(255,255,255,0.2)' }}
+        />
       </div>
 
-      {/* Cursor tracking spotlight */}
+      {/* Spotlight tracker */}
       <motion.div
         className="absolute inset-0 z-0 pointer-events-none transition-opacity duration-300"
         style={{
           opacity: hovered ? 1 : 0,
           background: useTransform(
             [mouseX, mouseY],
-            ([x, y]) => `radial-gradient(circle at ${x}px ${y}px, ${service.accent}25 0%, transparent 60%)`
+            ([x, y]) => `radial-gradient(circle at ${x}px ${y}px, ${service.accent}25 0%, transparent 65%)`
           ),
         }}
       />
 
-      {/* Top border accent line that slides in on hover */}
+      {/* Top hover accent bar */}
       <motion.div
-        className="absolute top-0 left-0 right-0 h-0.5 rounded-t-2xl z-10"
+        className="absolute top-0 left-0 right-0 h-0.5 rounded-t-[30px] z-10"
         style={{ backgroundColor: service.accent }}
         initial={{ scaleX: 0, originX: 0 }}
         variants={{
@@ -213,56 +382,46 @@ function ServiceCard({ service, index }: { service: ServiceItem; index: number }
         }}
       />
 
-      <div className="relative z-10 h-full flex flex-col justify-between">
-        <div className="flex flex-col">
-          {/* Icon and Index */}
-          <div className="flex items-center justify-between mb-5">
-            <motion.div
-              className="relative w-12 h-12 rounded-xl flex items-center justify-center"
-              variants={iconBoxVariants}
-              style={{ backgroundColor: `${service.accent}15` }}
-            >
-              <service.icon size={22} style={{ color: service.accent }} />
-            </motion.div>
-            <span className="font-mono text-[10px] tracking-widest text-slate-500 group-hover:text-slate-400 transition-colors">
-              {formattedIndex} // SERVICE
-            </span>
+      {/* Full Card Image (wow_portfolio style) */}
+      <div className="w-full h-full rounded-[20px] overflow-hidden relative z-10 select-none">
+        <img
+          src={service.image || `/img/projects/project-0${(index % 12) + 1}.jpg`}
+          alt={service.title}
+          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+        />
+        
+        {/* Floating Icon Box */}
+        <motion.div
+          className="absolute top-4 left-4 w-10 h-10 rounded-xl flex items-center justify-center border border-white/10 backdrop-blur-md bg-black/40 z-30"
+          variants={iconBoxVariants}
+        >
+          <service.icon size={18} style={{ color: service.accent }} />
+        </motion.div>
+        
+        {/* Index Number */}
+        <span className="absolute top-4 right-4 font-mono text-[9px] tracking-widest text-white/70 bg-black/50 backdrop-blur-md px-2.5 py-1 rounded-md border border-white/5 uppercase z-30">
+          {formattedIndex} // SVC
+        </span>
+
+        {/* Bottom Title Overlay (Glassmorphism caption) */}
+        <div className="absolute bottom-4 left-4 right-4 p-4 rounded-xl border border-white/10 bg-black/60 backdrop-blur-md z-30 transition-all duration-300 translate-y-1 group-hover:translate-y-0">
+          <h3 className="text-sm md:text-base font-bold text-white mb-1">{service.title}</h3>
+          <p className="text-slate-300 text-[10px] md:text-xs leading-relaxed line-clamp-2 mb-2">{service.description}</p>
+          {/* Feature badge tags list */}
+          <div className="flex flex-wrap gap-1 mt-2">
+            {service.features.map((feat) => (
+              <span
+                key={feat}
+                className="rounded-full border border-white/[0.06] bg-white/[0.03] px-2 py-0.5 text-[8px] md:text-[9px] font-medium text-slate-300"
+              >
+                {feat}
+              </span>
+            ))}
           </div>
-
-          {/* Title */}
-          <motion.h4
-            className="text-lg font-bold text-white mb-2 relative"
-            variants={{
-              rest: { color: 'rgb(255 255 255)' },
-              hover: { color: 'rgb(226 232 240)', transition: { duration: 0.2 } },
-            }}
-          >
-            {service.title}
-          </motion.h4>
-
-          {/* Description */}
-          <p className="text-slate-400 text-sm leading-relaxed relative line-clamp-3">
-            {service.description}
-          </p>
         </div>
 
-        {/* Feature list */}
-        <motion.ul className="space-y-1.5 relative mt-4" variants={featureVariants}>
-          {service.features.map((feat) => (
-            <motion.li
-              key={feat}
-              className="flex items-center gap-2 text-sm"
-              variants={featureItemVariants}
-            >
-              <motion.span
-                className="w-1.5 h-1.5 rounded-full shrink-0"
-                variants={dotVariants}
-                style={{ backgroundColor: service.accent }}
-              />
-              {feat}
-            </motion.li>
-          ))}
-        </motion.ul>
+        {/* Inner Glossy Reflection / Shadow Vignette */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent z-20 pointer-events-none" />
       </div>
     </motion.div>
   )

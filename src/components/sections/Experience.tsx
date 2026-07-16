@@ -1,16 +1,15 @@
 import { useEffect, useRef, useState } from 'react'
 import { motion, useMotionValue, useTransform } from 'framer-motion'
-import { ScrambledText } from '@/components/ui/ScrambledText'
 import { ParallaxOrb } from '@/components/ui/ParallaxOrb'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { TimelineItem } from '@/lib/types'
 import { timelineData } from '@/lib/constants'
-import { createCardVariants, iconBoxVariants, dotVariants, badgeVariants } from '@/lib/animations'
+import { createCardVariants, iconBoxVariants, badgeVariants } from '@/lib/animations'
 
 gsap.registerPlugin(ScrollTrigger)
 
-const cardVariants = createCardVariants();
+const cardVariants = createCardVariants()
 
 export default function ExperienceSection() {
   const sectionRef = useRef<HTMLElement>(null)
@@ -38,7 +37,7 @@ export default function ExperienceSection() {
           trigger: header,
           start: 'top 85%',
           toggleActions: 'play none none none',
-        }
+        },
       }
     )
 
@@ -50,9 +49,14 @@ export default function ExperienceSection() {
       scrub: true,
       onUpdate: (self) => {
         if (lineFill) {
-          lineFill.style.transform = `scaleY(${self.progress})`
+          gsap.to(lineFill, {
+            scaleY: self.progress,
+            duration: 0.1,
+            overwrite: 'auto',
+            ease: 'none',
+          })
         }
-      }
+      },
     })
 
     // Staggered reveals and dot triggers for each timeline item
@@ -75,7 +79,7 @@ export default function ExperienceSection() {
             trigger: itemEl,
             start: 'top 82%',
             toggleActions: 'play none none none',
-          }
+          },
         }
       )
 
@@ -92,7 +96,7 @@ export default function ExperienceSection() {
             start: 'top 65%',
             end: 'bottom 35%',
             toggleActions: 'play reverse play reverse',
-          }
+          },
         }
       )
     })
@@ -106,25 +110,23 @@ export default function ExperienceSection() {
     <section
       id="experience"
       ref={sectionRef}
-      className="relative min-h-screen bg-black py-24 sm:py-32 overflow-hidden"
+      className="relative min-h-screen bg-black py-24 sm:py-32 overflow-hidden border-t border-white/5 z-15"
     >
       {/* Background orbs */}
-      <div className="absolute inset-0 pointer-events-none">
+      <div className="absolute inset-0 pointer-events-none opacity-20">
         <ParallaxOrb
-          className="absolute top-20 right-10 w-100 h-100 rounded-full opacity-15"
+          className="absolute top-20 right-10 w-56 h-56 md:w-100 md:h-100 rounded-full"
           style={{
-            background: 'radial-gradient(circle, rgba(200,53,58,0.4) 0%, transparent 70%)',
-            filter: 'blur(80px)',
+            background: 'radial-gradient(circle, rgba(200,53,58,0.2) 0%, rgba(200,53,58,0.06) 50%, transparent 100%)',
           }}
           speedX={0.02}
           speedY={0.03}
           scrollSpeed={-0.1}
         />
         <ParallaxOrb
-          className="absolute bottom-40 left-10 w-75 h-75 rounded-full opacity-15"
+          className="absolute bottom-40 left-10 w-48 h-48 md:w-75 md:h-75 rounded-full"
           style={{
-            background: 'radial-gradient(circle, rgba(158,42,47,0.3) 0%, transparent 70%)',
-            filter: 'blur(80px)',
+            background: 'radial-gradient(circle, rgba(158,42,47,0.15) 0%, rgba(158,42,47,0.04) 50%, transparent 100%)',
           }}
           speedX={-0.03}
           speedY={0.02}
@@ -132,30 +134,23 @@ export default function ExperienceSection() {
         />
       </div>
 
-      <div className="relative z-10 w-full max-w-6xl xl:max-w-7xl 3xl:max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 mb-16 sm:mb-24">
-        <div ref={headerRef} className="text-center" style={{ opacity: 0 }}>
-          <div className="inline-flex items-center gap-2 px-3 sm:px-4 py-2 rounded-full glass mb-4 sm:mb-6">
-            <span className="w-2 h-2 rounded-full bg-crimson-500 animate-pulse" />
-            <span className="text-xs sm:text-sm font-mono text-crimson-300">My Journey</span>
-          </div>
-          <h2 className="text-4xl sm:text-5xl md:text-6xl xl:text-7xl font-black text-white mb-4">
-            <ScrambledText text="Journey & " />
-            <span className="gradient-text-violet">
-              <ScrambledText text="Milestones" delay={300} />
-            </span>
-          </h2>
-          <p className="text-base sm:text-lg text-slate-400 max-w-2xl mx-auto px-2 sm:px-0">
-            A timeline of my academic and professional growth
-          </p>
-        </div>
+      {/* Massive Background Watermark */}
+      <div className="absolute top-10 left-0 w-full flex items-start justify-center pointer-events-none z-0">
+        <h1 className="text-[14vw] sm:text-[16vw] md:text-[18vw] text-white/5 font-black tracking-tighter leading-none whitespace-nowrap uppercase select-none">
+          Experience
+        </h1>
       </div>
 
-      <div ref={timelineRef} className="relative z-10 max-w-6xl xl:max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-12">
+      <div className="relative z-10 w-full max-w-6xl xl:max-w-7xl mx-auto px-6 mb-10 md:mb-20 lg:mb-40">
+        <div ref={headerRef} className="text-center" style={{ opacity: 0 }} />
+      </div>
+
+      <div ref={timelineRef} className="relative z-10 max-w-6xl xl:max-w-7xl mx-auto px-6 pt-20 md:pt-32">
         {/* Central Vertical Timeline Track line */}
-        <div className="absolute left-6 md:left-1/2 top-0 bottom-0 w-[2px] bg-white/[0.04] -translate-x-1/2 z-0">
+        <div className="absolute left-6 md:left-1/2 top-20 bottom-0 w-[2px] bg-white/[0.04] -translate-x-1/2 z-0">
           <div
             ref={lineFillRef}
-            className="w-full h-full bg-gradient-to-b from-red-500 to-red-600 origin-top shadow-[0_0_8px_rgba(239,68,68,0.5)]"
+            className="w-full h-full bg-linear-to-b from-red-500 to-red-600 origin-top shadow-[0_0_8px_rgba(239,68,68,0.5)]"
             style={{
               transform: 'scaleY(0)',
               transformOrigin: 'top',
@@ -164,7 +159,7 @@ export default function ExperienceSection() {
           />
         </div>
 
-        <div className="flex flex-col gap-12 sm:gap-16">
+        <div className="flex flex-col gap-24 sm:gap-32">
           {timelineData.map((item, index) => {
             const isLeft = index % 2 === 0
             return (
@@ -186,17 +181,24 @@ export default function ExperienceSection() {
                     className="timeline-node-dot w-3.5 h-3.5 rounded-full border-2 border-black transition-all duration-300"
                     style={{
                       backgroundColor: item.accent,
-                      boxShadow: `0 0 12px ${item.accent}40`
+                      boxShadow: `0 0 12px ${item.accent}40`,
                     }}
                   />
                 </div>
 
-                {/* Card Container */}
+                {/* Sleek Timeline Card Container */}
                 <div
-                  className={`w-full md:w-[45%] ${
-                    isLeft ? 'md:pr-12 md:text-right' : 'md:pl-12 pl-14'
-                  }`}
+                  className={`w-full md:w-[45%] pl-12 md:pl-0 ${
+                    isLeft ? 'md:pr-12 md:text-right' : 'md:pl-12'
+                  } relative overflow-visible`}
                 >
+                  {/* Subtle horizontal glowing indicator connector line from card to timeline dot */}
+                  {isLeft ? (
+                    <div className="hidden md:block absolute right-0 top-1/2 -translate-y-1/2 w-12 h-[1px] bg-gradient-to-r from-white/[0.08] to-transparent pointer-events-none" />
+                  ) : (
+                    <div className="hidden md:block absolute left-0 top-1/2 -translate-y-1/2 w-12 h-[1px] bg-gradient-to-l from-white/[0.08] to-transparent pointer-events-none" />
+                  )}
+
                   <ExperienceCardBody item={item} alignText={isLeft ? 'right' : 'left'} />
                 </div>
 
@@ -219,6 +221,8 @@ interface ExperienceCardBodyProps {
 function ExperienceCardBody({ item, alignText = 'left' }: ExperienceCardBodyProps) {
   const [hovered, setHovered] = useState(false)
   const rectRef = useRef<HTMLDivElement>(null)
+  const cardRectRef = useRef<DOMRect | null>(null)
+  const [isTouch, setIsTouch] = useState(false)
 
   const mouseX = useMotionValue(0)
   const mouseY = useMotionValue(0)
@@ -227,15 +231,39 @@ function ExperienceCardBody({ item, alignText = 'left' }: ExperienceCardBodyProp
   const rotateX = useTransform(mouseY, [0, 300], [5, -5])
   const rotateY = useTransform(mouseX, [0, 400], [-5, 5])
 
+  useEffect(() => {
+    setIsTouch(window.matchMedia('(pointer: coarse)').matches)
+  }, [])
+
+  function handleMouseEnter() {
+    if (isTouch) return
+    setHovered(true)
+    if (rectRef.current) {
+      cardRectRef.current = rectRef.current.getBoundingClientRect()
+    }
+  }
+
+  // Set default cursor coordinates
+  useEffect(() => {
+    mouseX.set(200)
+    mouseY.set(150)
+  }, [mouseX, mouseY])
+
   function handleMouseMove(e: React.MouseEvent<HTMLDivElement>) {
-    if (!rectRef.current) return
-    const rect = rectRef.current.getBoundingClientRect()
+    if (isTouch) return
+    if (!cardRectRef.current && rectRef.current) {
+      cardRectRef.current = rectRef.current.getBoundingClientRect()
+    }
+    const rect = cardRectRef.current
+    if (!rect) return
     mouseX.set(e.clientX - rect.left)
     mouseY.set(e.clientY - rect.top)
   }
 
   function handleMouseLeave() {
+    if (isTouch) return
     setHovered(false)
+    cardRectRef.current = null
     mouseX.set(200)
     mouseY.set(150)
   }
@@ -245,9 +273,9 @@ function ExperienceCardBody({ item, alignText = 'left' }: ExperienceCardBodyProp
   return (
     <motion.div
       ref={rectRef}
-      className={`experience-card-body group relative glass rounded-2xl p-6 border border-white/[0.07] cursor-default overflow-hidden min-h-[260px] h-full flex flex-col justify-between`}
+      className={`experience-card-body group relative rounded-2xl p-6 md:p-8 border border-white/[0.06] bg-zinc-950/60 backdrop-blur-md cursor-default overflow-hidden min-h-[220px] h-full flex flex-col justify-between z-20 hover:border-red-500/20 transition-all duration-300`}
       onMouseMove={handleMouseMove}
-      onMouseEnter={() => setHovered(true)}
+      onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       variants={cardVariants}
       style={{
@@ -275,10 +303,22 @@ function ExperienceCardBody({ item, alignText = 'left' }: ExperienceCardBodyProp
 
       {/* Cybernetic geometric corners */}
       <div className="absolute inset-0 pointer-events-none z-20">
-        <div className="absolute top-0 left-0 w-3.5 h-3.5 border-t border-l transition-all duration-300 group-hover:w-4.5 group-hover:h-4.5" style={{ borderColor: hovered ? item.accent : 'rgba(255,255,255,0.2)' }} />
-        <div className="absolute top-0 right-0 w-3.5 h-3.5 border-t border-r transition-all duration-300 group-hover:w-4.5 group-hover:h-4.5" style={{ borderColor: hovered ? item.accent : 'rgba(255,255,255,0.2)' }} />
-        <div className="absolute bottom-0 left-0 w-3.5 h-3.5 border-b border-l transition-all duration-300 group-hover:w-4.5 group-hover:h-4.5" style={{ borderColor: hovered ? item.accent : 'rgba(255,255,255,0.2)' }} />
-        <div className="absolute bottom-0 right-0 w-3.5 h-3.5 border-b border-r transition-all duration-300 group-hover:w-4.5 group-hover:h-4.5" style={{ borderColor: hovered ? item.accent : 'rgba(255,255,255,0.2)' }} />
+        <div
+          className="absolute top-0 left-0 w-3.5 h-3.5 border-t border-l transition-all duration-300 group-hover:w-4.5 group-hover:h-4.5"
+          style={{ borderColor: hovered ? item.accent : 'rgba(255,255,255,0.06)' }}
+        />
+        <div
+          className="absolute top-0 right-0 w-3.5 h-3.5 border-t border-r transition-all duration-300 group-hover:w-4.5 group-hover:h-4.5"
+          style={{ borderColor: hovered ? item.accent : 'rgba(255,255,255,0.06)' }}
+        />
+        <div
+          className="absolute bottom-0 left-0 w-3.5 h-3.5 border-b border-l transition-all duration-300 group-hover:w-4.5 group-hover:h-4.5"
+          style={{ borderColor: hovered ? item.accent : 'rgba(255,255,255,0.06)' }}
+        />
+        <div
+          className="absolute bottom-0 right-0 w-3.5 h-3.5 border-b border-r transition-all duration-300 group-hover:w-4.5 group-hover:h-4.5"
+          style={{ borderColor: hovered ? item.accent : 'rgba(255,255,255,0.06)' }}
+        />
       </div>
 
       {/* Cursor tracking spotlight */}
@@ -309,35 +349,38 @@ function ExperienceCardBody({ item, alignText = 'left' }: ExperienceCardBodyProp
           {/* Card header */}
           <div className={`flex items-center gap-3 mb-4 ${isAlignedRight ? 'md:flex-row-reverse' : ''}`}>
             <motion.div
-              className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
+              className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 border border-white/5 bg-zinc-900/50"
               variants={iconBoxVariants}
-              style={{ backgroundColor: `${item.accent}18` }}
             >
               <item.icon size={20} style={{ color: item.accent }} />
             </motion.div>
             <div className="flex-1">
               <motion.span
-                className="inline-block px-2.5 py-1 rounded-full text-xs font-mono font-semibold"
+                className="inline-block px-2.5 py-1 rounded-full text-[10px] font-mono font-semibold uppercase tracking-wider border"
                 variants={badgeVariants}
-                style={{ backgroundColor: `${item.accent}15`, color: item.accent }}
+                style={{
+                  backgroundColor: `${item.accent}15`,
+                  color: item.accent,
+                  borderColor: `${item.accent}30`,
+                }}
               >
                 {item.type === 'experience' ? 'Experience' : 'Education'}
               </motion.span>
             </div>
           </div>
 
-          <h4 className={`text-lg font-bold text-white mb-1 transition-colors ${isAlignedRight ? 'md:text-right text-left' : 'text-left'}`}>
+          <h4 className={`text-base md:text-lg font-bold text-white mb-1 transition-colors ${isAlignedRight ? 'md:text-right text-left' : 'text-left'}`}>
             {item.role}
           </h4>
-          <p className={`text-sm font-semibold mb-1 ${isAlignedRight ? 'md:text-right text-left' : 'text-left'}`} style={{ color: item.accent }}>
+          <p className={`text-xs md:text-sm font-semibold mb-1 ${isAlignedRight ? 'md:text-right text-left' : 'text-left'}`} style={{ color: item.accent }}>
             {item.org}
           </p>
-          <p className={`text-xs text-slate-500 font-mono mb-2 ${isAlignedRight ? 'md:text-right text-left' : 'text-left'}`}>
+          <p className={`text-[10px] text-slate-500 font-mono mb-2 ${isAlignedRight ? 'md:text-right text-left' : 'text-left'}`}>
             {item.period}
           </p>
         </div>
 
-        <p className={`text-slate-400 leading-relaxed text-sm line-clamp-3 mt-3 ${isAlignedRight ? 'md:text-right text-left' : 'text-left'}`}>
+        <p className={`text-slate-400 leading-relaxed text-xs md:text-sm mt-3 ${isAlignedRight ? 'md:text-right text-left' : 'text-left'}`}>
           {item.desc}
         </p>
       </div>

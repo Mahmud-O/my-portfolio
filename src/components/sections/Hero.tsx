@@ -1,55 +1,20 @@
 import { useEffect, useRef, useState } from 'react'
-import { FaArrowRight, FaDownload, FaGithub } from 'react-icons/fa6'
-import { HERO_PHRASES } from '@/lib/heroData'
+import { FaGithub, FaLinkedin, FaFacebookF } from 'react-icons/fa6'
+import { IoLogoWhatsapp } from 'react-icons/io'
 import { ParallaxOrb } from '@/components/ui/ParallaxOrb'
 
-const PROFILE_IMAGE_SRC = '/img/personal-portrait-768.jpg'
-const PROFILE_IMAGE_SRC_SET = [
-  '/img/personal-portrait-768.jpg 768w',
-  '/img/personal-portrait-1024.jpg 1024w',
-].join(', ')
+const PROFILE_IMAGE_SRC = '/img/gen/modern style 1.png'
 
 export default function HeroSection() {
-  const [text, setText] = useState('')
-  const [isDeleting, setIsDeleting] = useState(false)
-  const [loopNum, setLoopNum] = useState(0)
-  const [typingSpeed, setTypingSpeed] = useState(150)
   const [profileImageAvailable, setProfileImageAvailable] = useState(true)
 
   const containerRef = useRef<HTMLDivElement>(null)
   const portraitRef = useRef<HTMLDivElement>(null)
-  const headlineRef = useRef<HTMLHeadingElement>(null)
+  const textRef = useRef<HTMLDivElement>(null)
   const subRef = useRef<HTMLDivElement>(null)
   const descRef = useRef<HTMLParagraphElement>(null)
   const ctaRef = useRef<HTMLDivElement>(null)
   const scrollRef = useRef<HTMLDivElement>(null)
-  const cursorRef = useRef<HTMLSpanElement>(null)
-
-  useEffect(() => {
-    const handleTyping = () => {
-      const i = loopNum % HERO_PHRASES.length
-      const fullText = HERO_PHRASES[i]
-
-      setText(
-        isDeleting
-          ? fullText.substring(0, text.length - 1)
-          : fullText.substring(0, text.length + 1)
-      )
-
-      setTypingSpeed(isDeleting ? 40 : 80)
-
-      if (!isDeleting && text === fullText) {
-        setTimeout(() => setIsDeleting(true), 2500)
-      } else if (isDeleting && text === '') {
-        setIsDeleting(false)
-        setLoopNum(loopNum + 1)
-        setTypingSpeed(400)
-      }
-    }
-
-    const timer = setTimeout(handleTyping, typingSpeed)
-    return () => clearTimeout(timer)
-  }, [text, isDeleting, loopNum, typingSpeed])
 
   useEffect(() => {
     let mounted = true
@@ -58,52 +23,62 @@ export default function HeroSection() {
 
     const runAnimation = async () => {
       const { default: gsap } = await import('gsap')
+      const { ScrollTrigger } = await import('gsap/ScrollTrigger')
+      gsap.registerPlugin(ScrollTrigger)
+
       if (!mounted) return
 
       const ctx = gsap.context(() => {
         const tl = gsap.timeline({ defaults: { ease: 'power3.out' } })
 
-        if (headlineRef.current) {
-          const text = headlineRef.current.textContent || ''
-          headlineRef.current.innerHTML = text
-            .split('')
-            .map((ch) =>
-              ch === ' '
-                ? `<span style="display:inline-block;width:0.3em">&nbsp;</span>`
-                : `<span style="display:inline-block;opacity:0;transform:translateY(60px)">${ch}</span>`
-            )
-            .join('')
+        tl.fromTo(
+          subRef.current,
+          { opacity: 0, y: 20 },
+          { opacity: 1, y: 0, duration: 0.6 },
+          0.1
+        )
 
-          tl.to(
-            headlineRef.current.querySelectorAll('span'),
-            {
-              opacity: 1,
-              y: 0,
-              duration: 0.06,
-              stagger: 0.03,
-              ease: 'back.out(1.5)',
-            },
-            0.2
-          )
-        }
+        tl.fromTo(
+          '.hero-heading-line',
+          { opacity: 0, y: 40 },
+          { opacity: 1, y: 0, duration: 0.8, stagger: 0.15, ease: 'power3.out' },
+          0.2
+        )
 
         tl.fromTo(
           portraitRef.current,
-          { opacity: 0, y: 24, scale: 0.92 },
-          { opacity: 1, y: 0, scale: 1, duration: 0.7, ease: 'back.out(1.35)' },
+          { opacity: 0, y: 30, scale: 0.95 },
+          { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: 'back.out(1.2)' },
           0.35
         )
-        tl.fromTo(subRef.current, { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.6 }, 0.55)
-        tl.fromTo(descRef.current, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.6 }, 0.75)
-        tl.fromTo(ctaRef.current, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.6 }, 0.9)
-        tl.fromTo(scrollRef.current, { opacity: 0 }, { opacity: 1, duration: 0.6 }, 1.3)
 
-        gsap.to(cursorRef.current, {
+        tl.fromTo(descRef.current, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.6 }, 0.6)
+        tl.fromTo(ctaRef.current, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.6 }, 0.75)
+        tl.fromTo(scrollRef.current, { opacity: 0 }, { opacity: 1, duration: 0.6 }, 1.1)
+
+        // Scroll Parallax for Hero Image
+        gsap.to(portraitRef.current, {
+          y: 100,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: containerRef.current,
+            start: 'top top',
+            end: 'bottom top',
+            scrub: 1.2,
+          },
+        })
+
+        // Scroll Parallax for Text Content (fades and moves up)
+        gsap.to(textRef.current, {
+          y: -50,
           opacity: 0,
-          duration: 0.25,
-          repeat: -1,
-          yoyo: true,
-          ease: 'steps(1)',
+          ease: 'none',
+          scrollTrigger: {
+            trigger: containerRef.current,
+            start: 'top top',
+            end: 'bottom top',
+            scrub: 1.2,
+          },
         })
       }, containerRef)
 
@@ -147,15 +122,14 @@ export default function HeroSection() {
   }, [])
 
   return (
-    <section id="hero" ref={containerRef} className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden bg-grid">
+    <section id="hero" ref={containerRef} className="relative min-h-screen flex flex-col items-center justify-center bg-grid">
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
         <ParallaxOrb
           className="anim-orb-1 absolute rounded-full opacity-30 w-75 h-75 sm:w-100 sm:h-100 md:w-125 md:h-125 lg:w-150 lg:h-150 xl:w-175 xl:h-175"
           style={{
             top: '-10%',
             right: '-5%',
-            background: 'radial-gradient(circle, rgba(220,38,38,0.55) 0%, rgba(220,38,38,0) 70%)',
-            filter: 'blur(60px)',
+            background: 'radial-gradient(circle, rgba(220,38,38,0.3) 0%, rgba(220,38,38,0.08) 50%, transparent 100%)',
           }}
           speedX={0.03}
           speedY={0.03}
@@ -166,8 +140,7 @@ export default function HeroSection() {
           style={{
             bottom: '-5%',
             left: '-5%',
-            background: 'radial-gradient(circle, rgba(185,28,28,0.45) 0%, rgba(185,28,28,0) 70%)',
-            filter: 'blur(60px)',
+            background: 'radial-gradient(circle, rgba(185,28,28,0.25) 0%, rgba(185,28,28,0.06) 50%, transparent 100%)',
           }}
           speedX={-0.04}
           speedY={0.02}
@@ -178,8 +151,7 @@ export default function HeroSection() {
           style={{
             top: '40%',
             left: '20%',
-            background: 'radial-gradient(circle, rgba(220,38,38,0.12) 0%, rgba(220,38,38,0) 70%)',
-            filter: 'blur(80px)',
+            background: 'radial-gradient(circle, rgba(220,38,38,0.08) 0%, rgba(220,38,38,0.02) 50%, transparent 100%)',
           }}
           speedX={0.02}
           speedY={-0.03}
@@ -187,137 +159,128 @@ export default function HeroSection() {
         />
       </div>
 
-      <div className="relative z-10 w-full max-w-4xl lg:max-w-6xl xl:max-w-7xl 2xl:max-w-360 3xl:max-w-[96rem] mx-auto px-4 sm:px-6 lg:px-12 xl:px-16 pt-20 sm:pt-28 md:pt-32 lg:pt-34 xl:pt-36 pb-10 sm:pb-20 md:pb-24 lg:pb-28 xl:pb-32">
-        <div className="grid items-center gap-8 lg:grid-cols-[minmax(0,1fr)_20rem] xl:grid-cols-[minmax(0,1fr)_23rem] lg:text-left">
-          <div className="flex flex-col items-center lg:items-start text-center lg:text-left min-w-0">
-            <div
-              ref={subRef}
-              className="inline-flex items-center gap-2 px-3 sm:px-4 py-2 rounded-full border border-green-500/25 bg-green-500/8 mb-5 sm:mb-6 text-xs sm:text-sm font-mono text-green-400"
-              style={{ opacity: 0 }}
-            >
-              <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
-              Available for opportunities
+      <div className="relative z-10 w-full max-w-[1400px] mx-auto px-6 md:px-12 flex flex-col lg:flex-row items-center justify-between gap-8 lg:gap-12 h-full pt-20 pb-6 lg:pt-24 lg:pb-12">
+        <div ref={textRef} className="w-full lg:w-[55%] flex flex-col items-start justify-center text-white z-20 h-full will-change-transform">
+          <div ref={subRef} style={{ opacity: 0 }} className="mb-4 text-left">
+            <span className="inline-block text-[#dc2626] text-xs sm:text-sm font-bold tracking-[0.3em] uppercase">
+              Full-Stack Developer
+            </span>
+          </div>
+
+          <div className="flex flex-col mb-6 w-full text-left hero-heading-line" style={{ opacity: 0 }}>
+            <div className="leading-[0.85] pb-1">
+              <h1 className="text-[10vw] lg:text-[5.5rem] xl:text-[6.5rem] font-black uppercase tracking-tighter text-white">
+                Hello, I'm
+              </h1>
             </div>
-
-            <h1
-              ref={headlineRef}
-              className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl 2xl:text-8xl 3xl:text-[7.5rem] font-black text-white mb-4 sm:mb-5 lg:mb-6 tracking-tight leading-[1.05]"
-            >
-              Mahmoud Osama
-            </h1>
-
-            <div className="flex flex-wrap items-baseline justify-center lg:justify-start gap-x-1 mb-6 sm:mb-8 lg:mb-9 min-h-7 sm:min-h-10 lg:min-h-14">
-              <p className="text-base xs:text-lg sm:text-xl md:text-2xl xl:text-3xl 2xl:text-4xl font-light text-slate-400 text-center lg:text-left">
-                I engineer{' '}
-                <span className="gradient-text font-semibold">{text}</span>
-              </p>
-              <span
-                ref={cursorRef}
-                className="text-lg sm:text-xl md:text-2xl xl:text-3xl 2xl:text-4xl font-light text-slate-300"
-              >
-                |
-              </span>
+            <div className="leading-[0.85] pb-1">
+              <h1 className="text-[10vw] lg:text-[5.5rem] xl:text-[6.5rem] font-black uppercase tracking-tighter text-white">
+                Mahmoud Osama
+              </h1>
             </div>
+            <div className="leading-[0.85] pb-1 overflow-hidden h-[9.5vw] lg:h-[4.8rem] xl:h-[5.8rem] relative">
+              <style dangerouslySetInnerHTML={{__html: `
+                @keyframes text-roll {
+                  0%, 20% { transform: translateY(0%); }
+                  25%, 45% { transform: translateY(-20%); }
+                  50%, 70% { transform: translateY(-40%); }
+                  75%, 95% { transform: translateY(-60%); }
+                  100% { transform: translateY(-80%); }
+                }
+                .animate-text-roll {
+                  animation: text-roll 8s cubic-bezier(0.25, 1, 0.5, 1) infinite;
+                }
+              `}} />
+              <div className="animate-text-roll flex flex-col">
+                {['Developer', 'Freelancer', 'Designer', 'Creator', 'Developer'].map((text, idx) => (
+                  <h1
+                    key={idx}
+                    className="text-[10vw] lg:text-[5.5rem] xl:text-[6.5rem] font-black uppercase tracking-tighter text-transparent [-webkit-text-stroke:2px_#dc2626] m-0 p-0 pb-1 leading-[0.85]"
+                  >
+                    {text}
+                  </h1>
+                ))}
+              </div>
+            </div>
+          </div>
 
-            <p
-              ref={descRef}
-              className="text-sm sm:text-base md:text-lg xl:text-xl 2xl:text-2xl text-slate-400 max-w-xl md:max-w-2xl xl:max-w-3xl 2xl:max-w-4xl mx-auto lg:mx-0 leading-relaxed mb-8 sm:mb-12 lg:mb-12 px-2 sm:px-0"
-              style={{ opacity: 0 }}
-            >
-              Full Stack Developer specializing in{' '}
-              <span className="gradient-text font-medium">React.js</span> &{' '}
-              <span className="gradient-text font-medium">Node.js</span>. Passionate
-              about crafting pixel-perfect UIs, robust backends, and accessible
-              digital experiences.
+          <div className="mb-8 max-w-lg text-left">
+            <p ref={descRef} style={{ opacity: 0 }} className="text-slate-400 text-sm md:text-base leading-relaxed font-medium">
+              Passionate Web Developer crafting modern, interactive, and premium MERN stack web applications with rich animations and responsive layouts.
             </p>
-
-            <div
-              ref={ctaRef}
-              className="flex flex-wrap items-center justify-center lg:justify-start gap-3 sm:gap-4 lg:gap-5 mb-10 sm:mb-16 lg:mb-0"
-              style={{ opacity: 0 }}
-            >
-              <a
-                href="#projects"
-                className="btn-primary text-sm sm:text-base lg:text-lg px-6! sm:px-7! lg:px-8! py-2.5! sm:py-3! lg:py-4!"
-              >
-                View My Work
-                <FaArrowRight size={14} className="sm:size-4 lg:size-5" />
-              </a>
-              <a
-                href="/Mahmoud_Osama_Full_Stack.pdf"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btn-secondary text-sm sm:text-base lg:text-lg px-6! sm:px-7! lg:px-8! py-2.5! sm:py-3! lg:py-4!"
-              >
-                <FaDownload size={14} className="sm:size-4 lg:size-5" />
-                Download CV
-              </a>
-              <a
-                href="https://github.com/Mahmud-O"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btn-secondary text-sm sm:text-base lg:text-lg px-6! sm:px-7! lg:px-8! py-2.5! sm:py-3! lg:py-4!"
-              >
-                <FaGithub size={16} className="sm:size-4 lg:size-5" />
-                GitHub
-              </a>
-            </div>
           </div>
 
           <div
-            ref={portraitRef}
-            className="relative order-first lg:order-0 mx-auto lg:mx-0 lg:justify-self-end w-30 h-30 sm:w-36 sm:h-36 lg:w-72 lg:h-72 xl:w-82 xl:h-82"
+            ref={ctaRef}
+            className="flex flex-wrap items-center justify-center lg:justify-start gap-4 mb-10 sm:mb-16 lg:mb-0 select-none"
             style={{ opacity: 0 }}
           >
-            {/* Isolated Crop Container */}
-            <div className="relative w-full h-full rounded-full overflow-hidden p-[2.5px] bg-black shadow-[0_18px_70px_rgba(220,38,38,0.25)] lg:shadow-[0_28px_100px_rgba(220,38,38,0.3)]">
+            {/* WhatsApp */}
+            <a
+              href="https://wa.me/201016074277"
+              target="_blank"
+              rel="noreferrer"
+              className="w-12 h-12 rounded-full bg-white/[0.03] border border-white/10 flex items-center justify-center transition-all duration-300 hover:bg-[#25D366] hover:border-[#25D366] hover:shadow-[0_0_20px_rgba(37,211,102,0.4)] group"
+              aria-label="WhatsApp"
+            >
+              <IoLogoWhatsapp className="w-5 h-5 text-white group-hover:text-white transition-colors" />
+            </a>
 
-              {/* Conic Gradient rotating inside cropped frame */}
-              <div
-                className="absolute inset-[-100%] rounded-full animate-conic-rotate pointer-events-none z-0"
-                style={{
-                  background: 'conic-gradient(from 0deg, #dc2626 0%, #ef4444 25%, transparent 50%, #b91c1c 75%, #dc2626 100%)',
-                }}
-              />
+            {/* LinkedIn */}
+            <a
+              href="https://www.linkedin.com/in/ma252002/"
+              target="_blank"
+              rel="noreferrer"
+              className="w-12 h-12 rounded-full bg-white/[0.03] border border-white/10 flex items-center justify-center transition-all duration-300 hover:bg-[#0a66c2] hover:border-[#0a66c2] hover:shadow-[0_0_20px_rgba(10,102,194,0.4)] group"
+              aria-label="LinkedIn"
+            >
+              <FaLinkedin className="w-5 h-5 text-white group-hover:text-white transition-colors" />
+            </a>
 
-              {/* Image Panel */}
-              <div className="relative z-10 w-full h-full rounded-full overflow-hidden bg-black border border-white/10">
-                {profileImageAvailable ? (
-                  <img
-                    src={PROFILE_IMAGE_SRC}
-                    srcSet={PROFILE_IMAGE_SRC_SET}
-                    sizes="(min-width: 1280px) 328px, (min-width: 1024px) 288px, (min-width: 640px) 144px, 120px"
-                    alt="Mahmoud Osama portrait"
-                    width={768}
-                    height={768}
-                    decoding="async"
-                    fetchPriority="high"
-                    onError={() => setProfileImageAvailable(false)}
-                    className="w-full h-full object-cover object-center"
-                  />
-                ) : (
-                  <div className="w-full h-full flex items-center justify-center bg-linear-to-br from-slate-900 to-black text-3xl sm:text-4xl lg:text-7xl font-black gradient-text">
-                    MO
-                  </div>
-                )}
-              </div>
-            </div>
+            {/* Facebook */}
+            <a
+              href="https://www.facebook.com/mahmoud.osama.550367"
+              target="_blank"
+              rel="noreferrer"
+              className="w-12 h-12 rounded-full bg-white/[0.03] border border-white/10 flex items-center justify-center transition-all duration-300 hover:bg-[#1877F2] hover:border-[#1877F2] hover:shadow-[0_0_20px_rgba(24,119,242,0.4)] group"
+              aria-label="Facebook"
+            >
+              <FaFacebookF className="w-4 h-4 text-white group-hover:text-white transition-colors animate-none" />
+            </a>
 
-            {/* Status Dot (Remains Unclipped outside Crop Area) */}
-            <span className="absolute right-3 bottom-3 lg:right-7 lg:bottom-7 w-5 h-5 lg:w-7 lg:h-7 rounded-full bg-green-400 border-4 border-black shadow-[0_0_18px_rgba(74,222,128,0.7)] z-20" />
+            {/* GitHub */}
+            <a
+              href="https://github.com/Mahmud-O"
+              target="_blank"
+              rel="noreferrer"
+              className="w-12 h-12 rounded-full bg-white/[0.03] border border-white/10 flex items-center justify-center transition-all duration-300 hover:bg-[#dc2626] hover:border-[#dc2626] hover:shadow-[0_0_20px_rgba(220,38,38,0.4)] group"
+              aria-label="GitHub"
+            >
+              <FaGithub className="w-5 h-5 text-white group-hover:text-white transition-colors" />
+            </a>
           </div>
         </div>
-      </div>
 
-      <div
-        ref={scrollRef}
-        className="animate-bounce-y absolute bottom-4 md:bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 z-20"
-        style={{ opacity: 0 }}
-      >
-        <span className="text-[10px] md:text-xs text-slate-500 uppercase tracking-widest font-mono">
-          Scroll
-        </span>
-        <div className="w-px h-8 md:h-12 lg:h-14 bg-linear-to-b from-slate-500 to-transparent" />
+        <div
+          ref={portraitRef}
+          className="w-full lg:w-[45%] flex justify-center items-center h-full z-10 pt-4 lg:pt-0"
+          style={{ opacity: 0 }}
+        >
+          {profileImageAvailable ? (
+            <img
+              id="hero-image"
+              src={PROFILE_IMAGE_SRC}
+              alt="Mahmoud Osama Developer"
+              className="w-full max-w-[280px] lg:max-w-xl max-h-[45vh] lg:max-h-[85vh] object-contain drop-shadow-[0_25px_40px_rgba(220,38,38,0.15)] pointer-events-none will-change-transform"
+              loading="eager"
+              onError={() => setProfileImageAvailable(false)}
+            />
+          ) : (
+            <div className="w-48 h-48 rounded-full flex items-center justify-center bg-zinc-900 border border-white/10 text-4xl font-black text-white">
+              MO
+            </div>
+          )}
+        </div>
       </div>
     </section>
   )
