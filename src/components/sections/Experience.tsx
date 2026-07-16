@@ -147,7 +147,7 @@ export default function ExperienceSection() {
 
       <div ref={timelineRef} className="relative z-10 max-w-6xl xl:max-w-7xl mx-auto px-6 pt-20 md:pt-32">
         {/* Central Vertical Timeline Track line */}
-        <div className="absolute left-6 md:left-1/2 top-20 bottom-0 w-[2px] bg-white/[0.04] -translate-x-1/2 z-0">
+        <div className="absolute left-6 md:left-1/2 top-20 bottom-0 w-0.5 bg-white/4 -translate-x-1/2 z-0">
           <div
             ref={lineFillRef}
             className="w-full h-full bg-linear-to-b from-red-500 to-red-600 origin-top shadow-[0_0_8px_rgba(239,68,68,0.5)]"
