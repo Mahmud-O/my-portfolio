@@ -15,16 +15,29 @@ const Navbar = () => {
   const [scrolled, setScrolled] = useState(false)
   const [activeSection, setActiveSection] = useState('hero')
   const [mounted, setMounted] = useState(false)
+  const [showNavbar, setShowNavbar] = useState(true)
+  const [lastScrollY, setLastScrollY] = useState(0)
 
   useEffect(() => {
     setMounted(true)
   }, [])
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 40)
+    const onScroll = () => {
+      const currentScrollY = window.scrollY
+      setScrolled(currentScrollY > 40)
+      
+      if (currentScrollY > lastScrollY && currentScrollY > 100 && !mobileOpen) {
+        setShowNavbar(false) // Scroll down -> hide
+      } else {
+        setShowNavbar(true)  // Scroll up -> show
+      }
+      setLastScrollY(currentScrollY)
+    }
+
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
-  }, [])
+  }, [lastScrollY, mobileOpen])
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -52,7 +65,13 @@ const Navbar = () => {
       <header
         className={`fixed top-0 left-0 right-0 z-50 flex justify-center px-6 transition-all duration-500 ${
           scrolled ? 'pt-3' : 'pt-5'
-        } ${mounted ? 'translate-y-0 opacity-100' : '-translate-y-20 opacity-0'}`}
+        } ${
+          mounted
+            ? showNavbar
+              ? 'translate-y-0 opacity-100'
+              : '-translate-y-full opacity-0 pointer-events-none'
+            : '-translate-y-20 opacity-0'
+        }`}
       >
         <nav
           className={`flex items-center justify-between gap-4 sm:gap-8 px-4 sm:px-5 h-14 sm:h-16 lg:h-16 rounded-2xl transition-all duration-500 w-full max-w-3xl xl:max-w-4xl 3xl:max-w-5xl ${
