@@ -3,7 +3,7 @@
 A personal portfolio website for Mahmoud Osama (mahmoud25osama) built with React, Vite, TypeScript, and Tailwind CSS. The site showcases projects, skills, and provides an easy way for visitors to contact me.
 
 ## Live demo
-[mahmoud-osama.com](https://mahmoudosama.netlify.app/)
+[mahmoud-osama.com](https://mahmud-o.vercel.app/)
 
 ## Overview
 
@@ -18,6 +18,11 @@ This repository contains a modern, responsive React single-page portfolio applic
 - Responsive design optimized for desktop, tablet, and mobile
 - Project gallery with descriptions and links to demos / repositories
 - Contact form powered by EmailJS
+
+## Layout & Animations
+
+- **Desktop Overlay Transition**: Uses GSAP pinning and negative top margins (`mt-[-100vh]`) to create fluid overlapping scroll transitions between sections (e.g., `Services` and `Contact`).
+- **Mobile Responsive Layout**: Disables overlay shifting on smaller viewports (`mt-0`) to ensure sections scroll sequentially and do not obscure interactive elements like the services carousel.
 
 ## Tech Stack
 
@@ -83,5 +88,5 @@ Use:
 
 ## Contact
 
-- GitHub: https://github.com/mahmoud25osama
+- GitHub: https://github.com/Mahmud-O
 - Email: mahmoud4h5@gmail.com

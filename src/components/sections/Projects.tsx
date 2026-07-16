@@ -242,7 +242,7 @@ export default function ProjectsSection() {
     >
       {/* Background Typography */}
       <div className="absolute top-0 left-0 w-full flex items-start justify-center pointer-events-none z-0 pt-1 md:pt-0">
-        <h1 className="text-[15vw] sm:text-[18vw] md:text-[22vw] font-black text-zinc-950 tracking-tighter leading-none whitespace-nowrap uppercase">
+        <h1 className="text-[15vw] sm:text-[18vw] md:text-[22vw] font-black text-white/30 tracking-tighter leading-none whitespace-nowrap uppercase">
           My Work
         </h1>
       </div>

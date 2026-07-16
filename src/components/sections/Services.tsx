@@ -27,7 +27,7 @@ export default function ServicesSection() {
   const bgRefs = useRef<(HTMLDivElement | null)[]>([])
   const textRefs = useRef<(HTMLHeadingElement | null)[]>([])
 
-  const displayServices = [
+  const displayServices: Array<ServiceItem & { isVirtual?: boolean }> = [
     ...services,
     {
       title: 'Virtual Card',
@@ -168,11 +168,11 @@ export default function ServicesSection() {
         })
 
         bgRefs.current.forEach((bg, i) => {
-          if (bg) gsap.set(bg, { clearProps: 'all', opacity: i === 0 ? 1 : 0 })
+          if (bg) gsap.set(bg, { clearProps: 'opacity', opacity: i === 0 ? 1 : 0 })
         })
 
         textRefs.current.forEach((txt, i) => {
-          if (txt) gsap.set(txt, { clearProps: 'all', opacity: i === 0 ? 1 : 0 })
+          if (txt) gsap.set(txt, { clearProps: 'opacity', opacity: i === 0 ? 1 : 0 })
         })
       })
     }, sectionRef)
@@ -184,7 +184,7 @@ export default function ServicesSection() {
     <section
       id="services"
       ref={sectionRef}
-      className="relative w-full h-screen bg-black overflow-hidden flex items-center justify-center md:[perspective:1000px] border-t border-white/5"
+      className="relative w-full h-screen bg-black overflow-hidden flex items-center justify-center md:perspective-[1000px] border-t border-white/5"
     >
       {/* Background Orbs */}
       <div className="absolute inset-0 pointer-events-none z-10 opacity-20">
@@ -221,14 +221,14 @@ export default function ServicesSection() {
       ))}
 
       {/* Watermark Titles */}
-      <div className="absolute inset-0 flex items-center justify-center z-0 pointer-events-none select-none">
+      <div className="absolute top-10 md:top-0 left-0 w-full h-fit md:h-full flex items-start md:items-center justify-center z-0 pointer-events-none select-none">
         {displayServices.map((_, i) => (
           <h1
             key={`text-${i}`}
             ref={(el) => {
               textRefs.current[i] = el
             }}
-            className="absolute text-[22vw] md:text-[18vw] font-black uppercase text-transparent leading-none tracking-tighter mix-blend-overlay"
+            className="absolute text-[22vw] md:text-[18vw] font-black uppercase text-white/10 md:text-transparent leading-none tracking-tighter mix-blend-overlay"
             style={{
               WebkitTextStroke: '2px rgba(255,255,255,0.15)',
               opacity: 0,
@@ -241,7 +241,7 @@ export default function ServicesSection() {
 
       {/* Circular Carousel (Desktop) or Snap Slider (Mobile) */}
       <div
-        className="relative w-full h-full flex md:items-center md:justify-center z-10 md:[transform-style:preserve-3d] overflow-x-auto overflow-y-hidden md:overflow-visible snap-x snap-mandatory scrollbar-hide [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] items-center px-[10vw] md:px-0 gap-5 md:gap-0 touch-pan-x"
+        className="relative w-full h-full flex md:items-center md:justify-center z-10 md:transform-3d overflow-x-auto overflow-y-hidden md:overflow-visible snap-x snap-mandatory scrollbar-hide [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] items-center px-[10vw] md:px-0 gap-5 md:gap-0 touch-pan-x"
         onScroll={handleMobileScroll}
       >
         {displayServices.map((service, i) => (

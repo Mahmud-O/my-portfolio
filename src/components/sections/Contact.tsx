@@ -41,7 +41,7 @@ export default function ContactSection() {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }))
   }
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.SubmitEvent) => {
     e.preventDefault()
     setStatus('loading')
     try {
@@ -64,13 +64,13 @@ export default function ContactSection() {
   }
 
   return (
-    <div id="contact" className="relative z-20 w-full mt-[-100vh] bg-black">
+    <div id="contact" className="relative z-20 w-full md:mt-[-100vh] mt-0 bg-black">
       <section
         ref={sectionRef}
-        className="w-full bg-[#050505] rounded-t-[40px] border-t border-white/5 min-h-screen flex flex-col items-center justify-center py-32 px-4 overflow-hidden relative"
+        className="w-full bg-[#050505] rounded-t-2xl border-t border-white/5 min-h-screen flex flex-col items-center justify-center py-32 px-4 overflow-hidden relative"
       >
         {/* Big Bold Background Font */}
-        <div className="absolute inset-0 flex items-center justify-center opacity-3 pointer-events-none select-none">
+        <div className="absolute inset-0 flex items-center justify-center opacity-10 pointer-events-none select-none">
           <h1 className="text-[25vw] font-black text-white  whitespace-nowrap tracking-tighter leading-none">
             CONNECT
           </h1>

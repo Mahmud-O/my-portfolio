@@ -15,61 +15,61 @@ import Footer from './components/layout/Footer'
 
 const BackToTopLazy = lazy(() => import('./components/ui/BackToTop'))
 
-type DeferredSectionProps = {
-  id: string
-  component: ComponentType
-  rootMargin?: string
-}
+// type DeferredSectionProps = {
+//   id: string
+//   component: ComponentType
+//   rootMargin?: string
+// }
 
-function DeferredSection({
-  id,
-  component: Component,
-  rootMargin = '0px',
-}: DeferredSectionProps) {
-  const ref = useRef<HTMLElement>(null)
-  const [shouldLoad, setShouldLoad] = useState(false)
+// function DeferredSection({
+//   id,
+//   component: Component,
+//   rootMargin = '0px',
+// }: DeferredSectionProps) {
+//   const ref = useRef<HTMLElement>(null)
+//   const [shouldLoad, setShouldLoad] = useState(false)
 
-  useEffect(() => {
-    if (shouldLoad) return
+//   useEffect(() => {
+//     if (shouldLoad) return
 
-    const node = ref.current
-    if (!node) return
+//     const node = ref.current
+//     if (!node) return
 
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setShouldLoad(true)
-          observer.disconnect()
-        }
-      },
-      { rootMargin }
-    )
+//     const observer = new IntersectionObserver(
+//       ([entry]) => {
+//         if (entry.isIntersecting) {
+//           setShouldLoad(true)
+//           observer.disconnect()
+//         }
+//       },
+//       { rootMargin }
+//     )
 
-    observer.observe(node)
-    return () => observer.disconnect()
-  }, [rootMargin, shouldLoad])
+//     observer.observe(node)
+//     return () => observer.disconnect()
+//   }, [rootMargin, shouldLoad])
 
-  useEffect(() => {
-    if (shouldLoad) {
-      const timer = setTimeout(() => {
-        import('gsap/ScrollTrigger').then(({ ScrollTrigger }) => {
-          ScrollTrigger.refresh()
-        })
-      }, 250)
-      return () => clearTimeout(timer)
-    }
-  }, [shouldLoad])
+//   useEffect(() => {
+//     if (shouldLoad) {
+//       const timer = setTimeout(() => {
+//         import('gsap/ScrollTrigger').then(({ ScrollTrigger }) => {
+//           ScrollTrigger.refresh()
+//         })
+//       }, 250)
+//       return () => clearTimeout(timer)
+//     }
+//   }, [shouldLoad])
 
-  if (!shouldLoad) {
-    return <section id={id} ref={ref} className="min-h-screen bg-black" />
-  }
+//   if (!shouldLoad) {
+//     return <section id={id} ref={ref} className="min-h-screen bg-black" />
+//   }
 
-  return (
-    <Suspense fallback={<section id={id} className="min-h-screen bg-black" />}>
-      <Component />
-    </Suspense>
-  )
-}
+//   return (
+//     <Suspense fallback={<section id={id} className="min-h-screen bg-black" />}>
+//       <Component />
+//     </Suspense>
+//   )
+// }
 
 function DeferredBackToTop() {
   const [shouldLoad, setShouldLoad] = useState(false)

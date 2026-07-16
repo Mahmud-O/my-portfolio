@@ -217,10 +217,10 @@ export default function HeroSection() {
           >
             {/* WhatsApp */}
             <a
-              href="https://wa.me/201016074277"
+              href="https://wa.me/+201016074277"
               target="_blank"
               rel="noreferrer"
-              className="w-12 h-12 rounded-full bg-white/[0.03] border border-white/10 flex items-center justify-center transition-all duration-300 hover:bg-[#25D366] hover:border-[#25D366] hover:shadow-[0_0_20px_rgba(37,211,102,0.4)] group"
+              className="w-12 h-12 rounded-full bg-white/3 border border-white/10 flex items-center justify-center transition-all duration-300 hover:bg-[#25D366] hover:border-[#25D366] hover:shadow-[0_0_20px_rgba(37,211,102,0.4)] group"
               aria-label="WhatsApp"
             >
               <IoLogoWhatsapp className="w-5 h-5 text-white group-hover:text-white transition-colors" />
@@ -231,7 +231,7 @@ export default function HeroSection() {
               href="https://www.linkedin.com/in/ma252002/"
               target="_blank"
               rel="noreferrer"
-              className="w-12 h-12 rounded-full bg-white/[0.03] border border-white/10 flex items-center justify-center transition-all duration-300 hover:bg-[#0a66c2] hover:border-[#0a66c2] hover:shadow-[0_0_20px_rgba(10,102,194,0.4)] group"
+              className="w-12 h-12 rounded-full bg-white/3 border border-white/10 flex items-center justify-center transition-all duration-300 hover:bg-[#0a66c2] hover:border-[#0a66c2] hover:shadow-[0_0_20px_rgba(10,102,194,0.4)] group"
               aria-label="LinkedIn"
             >
               <FaLinkedin className="w-5 h-5 text-white group-hover:text-white transition-colors" />
@@ -242,7 +242,7 @@ export default function HeroSection() {
               href="https://www.facebook.com/mahmoud.osama.550367"
               target="_blank"
               rel="noreferrer"
-              className="w-12 h-12 rounded-full bg-white/[0.03] border border-white/10 flex items-center justify-center transition-all duration-300 hover:bg-[#1877F2] hover:border-[#1877F2] hover:shadow-[0_0_20px_rgba(24,119,242,0.4)] group"
+              className="w-12 h-12 rounded-full bg-white/3 border border-white/10 flex items-center justify-center transition-all duration-300 hover:bg-[#1877F2] hover:border-[#1877F2] hover:shadow-[0_0_20px_rgba(24,119,242,0.4)] group"
               aria-label="Facebook"
             >
               <FaFacebookF className="w-4 h-4 text-white group-hover:text-white transition-colors animate-none" />
@@ -253,7 +253,7 @@ export default function HeroSection() {
               href="https://github.com/Mahmud-O"
               target="_blank"
               rel="noreferrer"
-              className="w-12 h-12 rounded-full bg-white/[0.03] border border-white/10 flex items-center justify-center transition-all duration-300 hover:bg-[#dc2626] hover:border-[#dc2626] hover:shadow-[0_0_20px_rgba(220,38,38,0.4)] group"
+              className="w-12 h-12 rounded-full bg-white/3 border border-white/10 flex items-center justify-center transition-all duration-300 hover:bg-[#dc2626] hover:border-[#dc2626] hover:shadow-[0_0_20px_rgba(220,38,38,0.4)] group"
               aria-label="GitHub"
             >
               <FaGithub className="w-5 h-5 text-white group-hover:text-white transition-colors" />

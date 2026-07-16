@@ -138,8 +138,8 @@ export const timelineData: TimelineItem[] = [
 // Navigation Links
 // ============================================================================
 export const NAV_LINKS = [
+  { name: 'Experience', href: '#experience' },
   { name: 'Projects', href: '#projects' },
-  { name: 'Services', href: '#services' },
   { name: 'Contact', href: '#contact' },
 ]
 

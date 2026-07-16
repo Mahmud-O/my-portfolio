@@ -136,7 +136,7 @@ export default function ExperienceSection() {
 
       {/* Massive Background Watermark */}
       <div className="absolute top-10 left-0 w-full flex items-start justify-center pointer-events-none z-0">
-        <h1 className="text-[14vw] sm:text-[16vw] md:text-[18vw] text-white/5 font-black tracking-tighter leading-none whitespace-nowrap uppercase select-none">
+        <h1 className="text-[14vw] sm:text-[16vw] md:text-[18vw] text-white/30 font-black tracking-tighter leading-none whitespace-nowrap uppercase select-none">
           Experience
         </h1>
       </div>

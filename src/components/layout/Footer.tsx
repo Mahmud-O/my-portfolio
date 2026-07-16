@@ -92,7 +92,7 @@ export default function Footer() {
               Follow
             </a>
             <a
-              href="mailto:mahmoud4h5@gmail.com"
+              href="https://wa.me/+201016074277"
               target="_blank"
               rel="noreferrer"
               className="bg-zinc-100 hover:bg-white text-zinc-900 font-bold py-3.5 px-8 md:px-12 rounded-xl transition-all shadow-lg hover:shadow-white/20 text-xs md:text-sm tracking-widest uppercase"
@@ -106,10 +106,10 @@ export default function Footer() {
         <div className="flex flex-col items-center text-center">
           <a href="#" className="text-4xl md:text-5xl font-black tracking-tight flex items-center gap-1.5 select-none">
             <span className="text-black">Mahmoud</span>
-            <span className="text-white drop-shadow-md">.osama</span>
+            <span className="text-white drop-shadow-md"> Osama.</span>
           </a>
           <p className="mt-4 text-zinc-900 font-medium max-w-md text-sm md:text-base leading-relaxed px-4">
-            Crafting responsive, secure, and beautiful MERN stack applications with modern layouts and fluid animations.
+            Crafting responsive, secure, and beautiful Full stack applications with modern layouts and fluid animations.
           </p>
         </div>
 
