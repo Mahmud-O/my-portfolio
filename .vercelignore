@@ -8,3 +8,15 @@ public/img/*.svg
 !public/img/logo-*.png
 !public/img/personal-portrait-*.jpg
 !public/img/projects/*.jpg
+
+# Build, IDE, and Agent directories
+node_modules
+dist
+.git
+.idea
+.vercel
+.agents
+.claude
+.codex
+bun.lock
+package-lock.json
