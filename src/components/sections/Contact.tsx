@@ -1,31 +1,14 @@
 import { useEffect, useRef, useState } from 'react'
 import gsap from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import emailjs from '@emailjs/browser'
 import { FaCircleCheck, FaLinkedin, FaFacebookF, FaGithub } from 'react-icons/fa6'
 import { IoLogoWhatsapp } from 'react-icons/io'
-
-gsap.registerPlugin(ScrollTrigger)
 
 export default function ContactSection() {
   const [formData, setFormData] = useState({ name: '', email: '', message: '' })
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
   const sectionRef = useRef<HTMLElement>(null)
   const successRef = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      // Pin the section when its bottom hits the bottom of the viewport
-      // pinSpacing: false allows the footer to scroll over it
-      ScrollTrigger.create({
-        trigger: sectionRef.current,
-        start: 'bottom bottom',
-        pin: true,
-        pinSpacing: false,
-      })
-    }, sectionRef)
-    return () => ctx.revert()
-  }, [])
 
   useEffect(() => {
     if (status === 'success' && successRef.current) {
@@ -64,7 +47,7 @@ export default function ContactSection() {
   }
 
   return (
-    <div id="contact" className="relative z-20 w-full md:mt-[-100vh] mt-0 bg-black">
+    <div id="contact" className="relative z-20 w-full bg-black">
       <section
         ref={sectionRef}
         className="w-full bg-[#050505] rounded-t-2xl border-t border-white/5 min-h-screen flex flex-col items-center justify-center py-32 px-4 overflow-hidden relative"

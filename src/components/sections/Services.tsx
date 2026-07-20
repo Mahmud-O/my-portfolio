@@ -40,60 +40,11 @@ export default function ServicesSection() {
     }
   ]
 
-  const handleMobileScroll = (e: React.UIEvent<HTMLDivElement>) => {
-    if (window.innerWidth >= 769) return
-    const container = e.target as HTMLDivElement
-    const center = container.scrollLeft + container.offsetWidth / 2
-
-    let activeIdx = 0
-    let minDiff = Infinity
-
-    cardsRef.current.forEach((card, i) => {
-      if (!card || displayServices[i]?.isVirtual) return
-      const cardCenter = card.offsetLeft + card.offsetWidth / 2
-      const diff = Math.abs(cardCenter - center)
-      if (diff < minDiff) {
-        minDiff = diff
-        activeIdx = i
-      }
-    })
-
-    cardsRef.current.forEach((card, i) => {
-      if (card) {
-        gsap.to(card, {
-          scale: i === activeIdx ? 1 : 0.9,
-          duration: 0.4,
-          ease: 'power2.out',
-          overwrite: 'auto',
-        })
-      }
-    })
-
-    bgRefs.current.forEach((bg, i) => {
-      if (bg) {
-        gsap.to(bg, {
-          opacity: i === activeIdx ? 1 : 0,
-          duration: 0.4,
-          overwrite: 'auto',
-        })
-      }
-    })
-
-    textRefs.current.forEach((txt, i) => {
-      if (txt) {
-        gsap.to(txt, {
-          opacity: i === activeIdx ? 1 : 0,
-          duration: 0.4,
-          overwrite: 'auto',
-        })
-      }
-    })
-  }
-
   useLayoutEffect(() => {
     let ctx = gsap.context(() => {
       let mm = gsap.matchMedia()
 
+      // Desktop: 3D Curved Arc Pinned Scroll
       mm.add('(min-width: 769px)', () => {
         // Position card indices arced along the virtual massive circle
         const updateCards = (p: number) => {
@@ -158,21 +109,54 @@ export default function ServicesSection() {
         })
       })
 
+      // Mobile: Straight Horizontal Pinned Scroll
       mm.add('(max-width: 768px)', () => {
-        // Reset properties on mobile layout
-        cardsRef.current.forEach((card, i) => {
-          if (card) {
-            gsap.set(card, { clearProps: 'x,y,z,rotation,scale,opacity,position' })
-            gsap.set(card, { scale: i === 0 ? 1 : 0.9 })
-          }
-        })
+        const updateCardsMobile = (p: number) => {
+          const cardWidth = Math.min(window.innerWidth * 0.82, 350)
+          const spacing = cardWidth + 20
+          cardsRef.current.forEach((card, i) => {
+            if (!card) return
+            const offset = i - p
+            const x = offset * spacing
+            const scale = Math.max(0.82, 1 - Math.abs(offset) * 0.12)
+            const opacity = displayServices[i]?.isVirtual ? 0 : Math.max(0, 1 - Math.abs(offset) * 0.5)
+            const zIndex = Math.round(100 - Math.abs(offset) * 10)
 
-        bgRefs.current.forEach((bg, i) => {
-          if (bg) gsap.set(bg, { clearProps: 'opacity', opacity: i === 0 ? 1 : 0 })
-        })
+            gsap.set(card, {
+              x,
+              y: 0,
+              z: 0,
+              scale,
+              rotationZ: 0,
+              rotationY: 0,
+              opacity,
+              zIndex,
+            })
+          })
 
-        textRefs.current.forEach((txt, i) => {
-          if (txt) gsap.set(txt, { clearProps: 'opacity', opacity: i === 0 ? 1 : 0 })
+          bgRefs.current.forEach((bg, i) => {
+            if (!bg) return
+            const itemOpacity = Math.max(0, 1 - Math.abs(i - p))
+            gsap.set(bg, { opacity: itemOpacity })
+
+            if (textRefs.current[i]) {
+              gsap.set(textRefs.current[i], { opacity: itemOpacity })
+            }
+          })
+        }
+
+        updateCardsMobile(0)
+
+        ScrollTrigger.create({
+          trigger: sectionRef.current,
+          start: 'top top',
+          end: '+=400%',
+          pin: true,
+          scrub: 1,
+          onUpdate: (self) => {
+            const p = self.progress * (displayServices.length - 1)
+            updateCardsMobile(p)
+          },
         })
       })
     }, sectionRef)
@@ -239,18 +223,15 @@ export default function ServicesSection() {
         ))}
       </div>
 
-      {/* Circular Carousel (Desktop) or Snap Slider (Mobile) */}
-      <div
-        className="relative w-full h-full flex md:items-center md:justify-center z-10 md:transform-3d overflow-x-auto overflow-y-hidden md:overflow-visible snap-x snap-mandatory scrollbar-hide [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] items-center px-[10vw] md:px-0 gap-5 md:gap-0 touch-pan-x"
-        onScroll={handleMobileScroll}
-      >
+      {/* Cards Container */}
+      <div className="relative w-full h-full flex items-center justify-center z-10 md:transform-3d overflow-hidden">
         {displayServices.map((service, i) => (
           <div
             key={service.title || `virtual-${i}`}
             ref={(el) => {
               cardsRef.current[i] = el
             }}
-            className={`md:absolute relative shrink-0 snap-center w-[80vw] sm:w-[350px] md:w-[420px] h-[460px] md:h-[530px] rounded-[30px] flex flex-col justify-between will-change-transform z-10 pointer-events-auto ${service.isVirtual ? 'hidden md:flex opacity-0! pointer-events-none!' : ''}`}
+            className={`absolute shrink-0 w-[82vw] sm:w-[350px] md:w-[420px] h-[460px] md:h-[530px] rounded-[30px] flex flex-col justify-between will-change-transform z-10 pointer-events-auto ${service.isVirtual ? 'opacity-0! pointer-events-none!' : ''}`}
           >
             {!service.isVirtual && <ServiceCard service={service} index={i} />}
           </div>
